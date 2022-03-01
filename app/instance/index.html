@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+    <head>
+        <title>Instance Details</title>
+
+
+        <!-- jQuery CDN - Slim version (=without AJAX) -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <!-- Popper.JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+        <!-- Bootstrap JS -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+        <!-- jQuery and jQuery-UI -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+
+        <!-- Bootstrap CSS CDN -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+
+    </head>
+
+    <body>
+
+        <div class="container-fluid">
+
+            <!-- Static Template -->
+            <h1>Web Server Details</h1>
+            <button id="vmBtn">Get Details</button>
+            <br><br><br>
+
+            <!-- Holder for the response data -->
+            <div id="vmDesc">
+
+            </div>
+        </div>
+
+        <!-- Populate the div with the ec2 details -->
+        <script type="text/javascript">
+
+            // Fetch the data from the endpoint during loading
+            let data;
+            let xhttp = new XMLHttpRequest();
+            xhttp.open("GET", "http://54.155.250.180:8080/details/", true);
+            xhttp.responseType = 'json'; // Not a vaild responseType <= Check later
+            xhttp.send();
+            xhttp.onreadystatechange = function() {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+
+                    // Instantiate db object from response
+                    console.log("\nQuerying endpoint");
+                    data = xhttp.response;
+                }
+            };
+
+            // Make page interactive once loaded
+            $(document).ready(function () {
+
+                // Add data to target div when button is clicked
+                console.log("\nPage loaded");
+                $("#vmBtn").click( function() {
+
+                    // Add the key-value to the target div
+                    for(i of Object.keys(data) ) {
+                        $("#vmDesc").append(`<p>${i}: ${data[i]}</p>`);
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/BrenKenna/hostedApp/issues"
   },
-  "homepage": "https://github.com/BrenKenna/hostedApp#readme"
+  "homepage": "https://github.com/BrenKenna/hostedApp#readme",
+  "dependencies": {
+    "aws-sdk": "^2.1082.0"
+  }
 }
