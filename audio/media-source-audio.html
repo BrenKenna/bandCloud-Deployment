@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <meta charset="utf-8">
+      <title>Web Audio Basics</title>
+      <meta name="description" content="Audio basics demo for Web Audio API">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    </head>
+    
+    
+    <body>
+        
+        <h2>Audio source with acoustic and drums</h2>
+        <audio id="simple" controls>
+            
+            <!-- Entries based on data types -->
+            <source src="site_audio_acoustic.mp3" type="audio/mp3">
+        </audio>
+        <br><br><br>
+        
+        <h2>Empty Audio</h2>
+        <audio id="empty" controls>
+        </audio>
+        <button id="addSrc" onclick="addSourceAudio()">Fetch drums</button>
+        
+        
+        <button id="stop" onclick="stopAll()" disabled="disabled">Stop</button>
+        
+        <script>
+        
+            // Cross browser, select elements
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            let audioCtx;
+
+            // Load audio & play button elements
+            let emptyAudio, drumsAudio;
+            let audioLoaded = false;
+            const simpleAudio = document.querySelector("#simple");
+            drumsAudio = document.querySelector("#empty");
+            
+            // Stop btn
+            let isOpen = false;
+            const stopBtn = document.querySelector("#stop");
+            
+            // Initalize the audio context graph
+            function initAudio() {
+                audioCtx = new AudioContext();
+                isOpen = true;
+            }
+            
+            // Function
+            function stopAll(){
+                audioCtx.close().then(function() {
+                   stopBtn.setAttribute('disabled', 'disabled'); 
+                });
+                isOpen = false;
+            }
+            
+            // Add an event listenr to the simple audio
+            simpleAudio.addEventListener('play', function() {
+                
+                // Handle AC
+                stopBtn.removeAttribute("disabled");
+                if( !audioCtx ) {
+                    initAudio();
+                }
+                
+                if( !isOpen) {
+                    
+                    // Allow music to stop
+                    initAudio();
+                
+                    // Feed it the audio source
+                    let simpleSrc = audioCtx.createMediaElementSource(simpleAudio);
+
+                    // Connect to destination
+                    simpleSrc.connect(audioCtx.destination);
+                }
+                
+                else {
+                    window.alert("Othe file loaded");
+                }
+            }, false);
+            
+            
+            // Add drums to the second audio
+            function addSourceAudio(){
+                
+                // Update content if not loaded
+                if( !audioLoaded ) {
+                    
+                    // Set source
+                    document.querySelector("#empty").innerHTML = `
+                        <source src="site_audio_drums.mp3" type="audio/mp3">
+                    `;
+                
+                    // Update JS handlers
+                    drumsAudio = document.querySelector("#empty");
+                    audioLoaded = true;
+                }
+                
+            }
+            
+            // Add event listener to play drums if loaded
+            drumsAudio.addEventListener('play', function() {
+                if(audioLoaded) {
+                    
+                    // Handle AC
+                    stopBtn.removeAttribute("disabled");
+                    if( !audioCtx ) {
+                        initAudio();
+                    }
+                    
+                    
+                    // Handle crap
+                    if( !isOpen) {
+
+                        // Allow music to stop
+                        initAudio();
+                
+                        // Feed audio
+                        let drumsSrc = audioCtx.createMediaElementSource(drumsAudio);
+                        drumsSrc.connect(audioCtx.destination);
+                    }
+                    else {
+                        window.alert("Othe file loaded");
+                    }
+                }
+                
+                // Otherwise raise window alert
+                else {
+                    window.alert("Error! Drums have not being loaded");
+                }
+            }, false);
+            
+        </script>
+    </body>
+</html>

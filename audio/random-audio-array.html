@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <meta charset="utf-8">
+      <title>Web Audio Basics</title>
+      <meta name="description" content="Audio basics demo for Web Audio API">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    </head>
+    
+    
+    <body>
+        <h1>White noise generator</h1>
+        <button id="conn">Play</button>
+        
+        <button id="discon">Disconnect</button>
+        
+        <button id="stop">Stop</button>
+    
+        <script type="text/javascript">
+        
+            // Cross-browser compatability
+            let AudioContext = window.AudioContext || window.webkitAudioContext;
+            let audioCtx, soundSrc;
+            
+            // Get button
+            const btnCon = document.querySelector('#conn');
+            const btnDis = document.querySelector("#discon");
+            const btnStp = document.querySelector("#stop");
+            
+            
+            // Stereo has 2 channels, mono has one
+            let channels = 2;
+        
+            // Initalize the audio context graph
+            function initAudio() {
+                audioCtx = new AudioContext();
+            }
+            
+            // Disconnect WN
+            btnDis.onclick = function(){
+                soundSrc.disconnect();
+            }
+            
+            // Stop WN
+            btnStp.onclick = function(){
+                soundSrc.stop();
+            }
+            
+            // Generate white noise on click
+            btnCon.onclick = function() {
+                
+                // Instantiate if not already
+                if(!audioCtx) {
+                    initAudio();
+                }
+                
+                
+                // Create an empty 2 second buffer at the sampling rate of AC
+                let frameCount = audioCtx.sampleRate * 2.0;
+                let whiteNoiseBuffer = audioCtx.createBuffer(channels, frameCount, audioCtx.sampleRate);
+                
+                // Fill each channel with white noise
+                for( let channel = 0; channel < 1; channel++) {
+                    
+                    // Get the buffer array and populate it with random data
+                    let chanBuff = whiteNoiseBuffer.getChannelData(channel);
+                    for(let i = 0; i < frameCount; i++) {
+                        chanBuff[i] = (Math.random() * 2) - 1;
+                    }
+                }
+                
+                // Create a source node in audio context to place the white noise into
+                soundSrc = audioCtx.createBufferSource();
+                soundSrc.buffer = whiteNoiseBuffer;
+                
+                // Connect this node to AC graph
+                soundSrc.connect(audioCtx.destination);
+                
+                // Play audio
+                soundSrc.start();
+            }
+        
+        </script>
+    </body>
+    
+</html>
