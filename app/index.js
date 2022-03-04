@@ -5,30 +5,31 @@
 // Server and additional modules
 // const http = require('http'); // Works fine with HTTP, does not with HTTPS
 
-const express = require('express'),
+const https = require('https'), 
+    express = require('express'),
     path = require('path'),
     fs = require('fs');
 
 // Get EC2 function
 const AWS = require('aws-sdk'),
-    ec2_util = require('/home/ec2-user/hostedApp/node_modules/utils/aws/ec2_summary.js');
+    ec2_util = require(`${process.cwd()}\\utils\\aws\\ec2_summary.js`);
+
+/*
 let requestPromise = ec2_util.getInfo(AWS, 'eu-west-1');
 requestPromise.then(function(data) {
     console.log(ec2_util.parseInfo(data).InstanceId);
 });
+*/
 
 // Cert options
-/*
 const options = {
-    key: fs.readFileSync('../certs/key.pem'),
-    cert: fs.readFileSync('../certs/cert.pem')
+    key: fs.readFileSync(`${process.cwd()}/certs/key.pem`),
+    cert: fs.readFileSync(`${process.cwd()}/certs/cert.pem`)
 };
-*/
 
 // Create server
 const app = express();
 const serveIndex = require('serve-index');
-// const server = http.createServer(router);
 
 
 // Display time and date in console
@@ -53,6 +54,7 @@ app.use('/request-type', (req, res, next) => {
 });
 
 
+/*
 // Desired
 app.get('/details', function(req, res) {
 
@@ -66,11 +68,32 @@ app.get('/details', function(req, res) {
         res.end(ec2_response);
     });
 });
+*/
 
-// Bind server to port and ip
+// Create https server
+const server = https.createServer(options, app);
+server.listen(process.env.PORT || 8080, process.env.IP || '127.0.0.1', function() {
+    let srvrAddr = server.address();
+    console.log(`Server listening on port = ${srvrAddr.port}, address = ${srvrAddr.address}`);
+    console.log(`Current directory: ${process.cwd()}`);
+    console.log(`Server directory: ${path.resolve(__dirname, 'views')}`);
+    
+    // Log instance details
+    /*
+    requestPromise.then(function(data) {
+        console.log(ec2_util.parseInfo(data));
+    });
+    */
+})
+
+/**
+ * 
+// Bind server to port and ip via Express
 app.listen(8080, '0.0.0.0', function() {
     // Log instance details
     requestPromise.then(function(data) {
         console.log(ec2_util.parseInfo(data));
     });
 });
+ * 
+ */

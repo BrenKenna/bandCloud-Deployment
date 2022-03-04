@@ -1,3 +1,6 @@
 certs/*
 *pem
 *bat
+node_modules
+app/node_modules
+.git
