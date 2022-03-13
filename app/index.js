@@ -54,7 +54,6 @@ app.use('/request-type', (req, res, next) => {
 });
 
 
-/*
 // Desired
 app.get('/details', function(req, res) {
 
@@ -68,7 +67,7 @@ app.get('/details', function(req, res) {
         res.end(ec2_response);
     });
 });
-*/
+
 
 // Create https server
 const server = https.createServer(options, app);
