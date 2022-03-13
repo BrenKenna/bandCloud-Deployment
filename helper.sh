@@ -110,3 +110,15 @@ aws s3 cp bandCloud-App.tar.gz s3://bandcloud/app/
 
 # Copy archive from instance
 scp -i bandCloud.pem -r ec2-user@ec2-54-155-250-180.eu-west-1.compute.amazonaws.com:~/bandCloud-App.tar.gz ./
+
+
+
+
+###################
+#
+# cURL Req
+# 
+###################
+
+# Post: -k / --insecure
+for i in $(seq 100); do curl -k -X POST http://localhost:8080/login -H "Content-Type: application/json" -d '{"username": 123456, "password": 100}'; sleep 1s; done
