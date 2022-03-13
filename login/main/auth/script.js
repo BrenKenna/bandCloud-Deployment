@@ -11,7 +11,7 @@ function sendForm(){
         type: 'POST',
         url: '/login',
         dataType: 'json',
-        contentType: 'application/json',
+        contentType: 'application/json; charset=utf-8',
         data: msg,
         cache: false,
         success: function( response, textStatus, jQxhr ) {
