@@ -1,5 +1,7 @@
 
 // Send form data as JSON
+// Content Type = What is sent
+// Data Type = What is recieved
 function sendForm(){
 
     let msg = JSON.stringify({
@@ -8,17 +10,16 @@ function sendForm(){
     });
     
     $.ajax({
-        type: 'POST',
+        type: 'post',
         url: '/login',
-        dataType: 'json',
+        dataType: 'html',
         contentType: 'application/json; charset=utf-8',
         data: msg,
         cache: false,
         success: function( response, textStatus, jQxhr ) {
-            setTimeout(console.log(`I just sent: ${msg}`), 2000);
-            console.log(response);
-            console.log(textStatus);
-            console.dir(jQxhr, {depth: null});
+
+            // Load the response page
+            $('html').html(response);
         }
     });
 }

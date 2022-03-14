@@ -17,7 +17,11 @@
   },
   "homepage": "https://github.com/BrenKenna/hostedApp#readme",
   "dependencies": {
+    "aws-sdk": "^2.1086.0",
+    "axios": "^0.26.1",
     "express": "^4.17.3",
-    "aws-sdk": "^2.1086.0"
+    "html": "^1.0.0",
+    "request": "^2.88.2",
+    "requests": "^0.3.0"
   }
 }

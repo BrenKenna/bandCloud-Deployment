@@ -120,5 +120,15 @@ scp -i bandCloud.pem -r ec2-user@ec2-54-155-250-180.eu-west-1.compute.amazonaws.
 # 
 ###################
 
-# Post: -k / --insecure
+# For packnet sniffing
 for i in $(seq 100); do curl -k -X POST http://localhost:8080/login -H "Content-Type: application/json" -d '{"username": 123456, "password": 100}'; sleep 1s; done
+
+
+
+# Check response from posting a login
+curl -k -X POST https://localhost:8080/login -H "Content-Type: application/json" -d '{"username": 123456, "password": 100}'
+
+"""
+Postman recieves response but a
+
+"""
