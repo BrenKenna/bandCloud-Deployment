@@ -30,19 +30,11 @@ const app = express();
 const serveIndex = require('serve-index');
 
 
-// Display time and date in console
-app.use((req, res, next) => {
-    console.log('Time: ', Date.now());
-    next(); // So request does not get stuck
-});
-
 // For serving homepage
 app.use('/', express.static(path.resolve(__dirname, 'views')));
-app.use('/', serveIndex('views'));
 
 // For serving the vm details page
 app.use('/instance', express.static( path.resolve(__dirname, 'instance') ));
-app.use('/instance', serveIndex('instance'));
 
 
 // Path for an endpoint
@@ -80,15 +72,3 @@ server.listen(process.env.PORT || 8080, process.env.IP || '0.0.0.0', function() 
         console.log(ec2_util.parseInfo(data));
     });
 })
-
-/**
- * 
-// Bind server to port and ip via Express
-app.listen(8080, '0.0.0.0', function() {
-    // Log instance details
-    requestPromise.then(function(data) {
-        console.log(ec2_util.parseInfo(data));
-    });
-});
- * 
- */
