@@ -54,7 +54,7 @@ Server listening on port = 8000, address = 127.0.0.1
 ##############################################
 
 # Copy files
-ssh -i bandCloud.pem ec2-user@ec2-54-155-250-180.eu-west-1.compute.amazonaws.com "mkdir -p ~/hostedApp/app"
+ssh -i bandCloud.pem ec2-user@ec2-54-74-102-170.eu-west-1.compute.amazonaws.com "mkdir -p ~/hostedApp/app"
 scp -i bandCloud.pem -r app/* ec2-user@ec2-54-155-250-180.eu-west-1.compute.amazonaws.com:~/hostedApp/app/
 
 # Login
@@ -92,7 +92,7 @@ sudo yum install -y gcc-c++ make
 npm i aws-sdk
 
 
-# Configure client: eu-west
+# Configure client: eu-west-1
 aws configure
 
 
@@ -112,6 +112,8 @@ aws s3 cp bandCloud-App.tar.gz s3://bandcloud/app/
 scp -i bandCloud.pem -r ec2-user@ec2-54-155-250-180.eu-west-1.compute.amazonaws.com:~/bandCloud-App.tar.gz ./
 
 
+# Copy cert & key
+scp -i bandCloud.pem certs/* ec2-user@ec2-54-74-102-170.eu-west-1.compute.amazonaws.com:"/home/ec2-user/hostedApp/certs/"
 
 
 ###################

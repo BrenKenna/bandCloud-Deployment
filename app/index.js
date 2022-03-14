@@ -5,21 +5,19 @@
 // Server and additional modules
 // const http = require('http'); // Works fine with HTTP, does not with HTTPS
 
-const https = require('https'), 
+const https = require('http'), 
     express = require('express'),
     path = require('path'),
     fs = require('fs');
 
 // Get EC2 function
 const AWS = require('aws-sdk'),
-    ec2_util = require(`${process.cwd()}\\utils\\aws\\ec2_summary.js`);
+    ec2_util = require(`${process.cwd()}/node_modules/utils/aws/ec2_summary.js`);
 
-/*
 let requestPromise = ec2_util.getInfo(AWS, 'eu-west-1');
 requestPromise.then(function(data) {
     console.log(ec2_util.parseInfo(data).InstanceId);
 });
-*/
 
 // Cert options
 const options = {
@@ -70,19 +68,17 @@ app.get('/details', function(req, res) {
 
 
 // Create https server
-const server = https.createServer(options, app);
-server.listen(process.env.PORT || 8080, process.env.IP || '127.0.0.1', function() {
+const server = https.createServer(app);
+server.listen(process.env.PORT || 8080, process.env.IP || '0.0.0.0', function() {
     let srvrAddr = server.address();
     console.log(`Server listening on port = ${srvrAddr.port}, address = ${srvrAddr.address}`);
     console.log(`Current directory: ${process.cwd()}`);
     console.log(`Server directory: ${path.resolve(__dirname, 'views')}`);
     
     // Log instance details
-    /*
     requestPromise.then(function(data) {
         console.log(ec2_util.parseInfo(data));
     });
-    */
 })
 
 /**

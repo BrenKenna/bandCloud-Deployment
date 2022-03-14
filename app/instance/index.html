@@ -44,7 +44,7 @@
             // Fetch the data from the endpoint during loading
             let data;
             let xhttp = new XMLHttpRequest();
-            xhttp.open("GET", "http://54.155.250.180:8080/details/", true);
+            xhttp.open("GET", "http://{host:port}/details/", true);
             xhttp.responseType = 'json'; // Not a vaild responseType <= Check later
             xhttp.send();
             xhttp.onreadystatechange = function() {
