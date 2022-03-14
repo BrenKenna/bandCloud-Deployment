@@ -74,5 +74,6 @@ router.post("/login", function(req, resp) {
 // Start server
 server.listen(process.env.PORT || 8081, process.env.IP || '127.0.0.1', function() {
     let srvrAddr = server.address();
+    console.log("Starting login server exposed to the web app\n");
     console.log(`Server listening on port = ${srvrAddr.port}, address = ${srvrAddr.address}`);
 });
