@@ -3,8 +3,6 @@
  */
 
 // Server and additional modules
-// const http = require('http'); // Works fine with HTTP, does not with HTTPS
-
 const https = require('http'), 
     express = require('express'),
     path = require('path'),
