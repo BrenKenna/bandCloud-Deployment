@@ -10,7 +10,7 @@ const https = require('http'),
 
 // Get EC2 function
 const AWS = require('aws-sdk'),
-    ec2_util = require(`${process.cwd()}/node_modules/utils/aws/ec2_summary.js`);
+    ec2_util = require(`${process.cwd()}/utils/aws/ec2/ec2_summary.js`);
 
 let requestPromise = ec2_util.getInfo(AWS, 'eu-west-1');
 requestPromise.then(function(data) {

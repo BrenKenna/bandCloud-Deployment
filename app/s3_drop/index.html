@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+    <head>
+        <title>S3 Drop</title>
+
+        <!-- jQuery & Boostrap Stylings -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    </head>
+
+    <body>
+
+        <div class="container form-control mt-3">
+            <label for="bucketName">Bucket Name</label>
+            <input type="text" id="bucketName" placeholder="Enter Bucket Name" name="bucketName" required>
+            <button class="btn btn-success" id="poster" onClick="sendForm()">Submit</button>
+        </form>
+
+
+        <script type="application/javascript">
+            function sendForm(){
+
+                // Define message
+                let msg = JSON.stringify({
+                    Bucket_Name: $("#bucketName").val()
+                });
+                console.log(msg);
+
+                // Send post
+                $.ajax({
+                    type: 'post',
+                    url: 'http://52.16.106.49:8080/drop',
+                    dataType: 'html',
+                    contentType: 'application/json; charset=utf-8',
+                    data: msg,
+                    cache: false,
+                    success: function( response, textStatus, jQxhr ) {
+
+                        // Load the response page
+                        console.log("\n");
+                        console.log(msg);
+                        $('body').html(response);
+                    }
+                });
+            }
+        </script>
+
+    </body>
+</html>
