@@ -1,5 +1,4 @@
 // Server and additional modules
-const res = require('express/lib/response');
 const https = require('http'), 
     express = require('express'),
     path = require('path'),
