@@ -54,7 +54,7 @@ Server listening on port = 8000, address = 127.0.0.1
 ##############################################
 
 # Copy files
-ssh -i bandCloud.pem ec2-user@ec2-176-34-192-215.eu-west-1.compute.amazonaws.com "mkdir -p ~/hostedApp/app"
+ssh -i bandCloud.pem ec2-user@ec2-34-244-43-187.eu-west-1.compute.amazonaws.com  "mkdir -p ~/hostedApp/app"
 scp -i bandCloud.pem -r app/* ec2-user@ec2-54-155-250-180.eu-west-1.compute.amazonaws.com:~/hostedApp/app/
 
 # Login
@@ -137,7 +137,7 @@ cd hostedApp
 # Install sotware
 curl -sL https://rpm.nodesource.com/setup_14.x | sudo bash -
 sudo yum install -y nodejs gcc-c++ make git
-npm i aws-sdk express axios
+npm i aws-sdk express
 
 
 # Start app

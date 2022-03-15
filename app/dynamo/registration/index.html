@@ -33,8 +33,9 @@
                 let msg = JSON.stringify({
                     username: $("#uname").val(),
                     password: $("#pass").val(),
-                    email: $("#email_Inp").val
+                    email: $("#email_Inp").val()
                 });
+                console.log(msg);
 
                 // Send post
                 $.ajax({

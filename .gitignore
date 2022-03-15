@@ -4,3 +4,4 @@ certs/*
 node_modules
 app/node_modules
 .git
+*sh
