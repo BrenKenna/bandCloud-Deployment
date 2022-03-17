@@ -46,6 +46,7 @@
             // console.clear();
             const AudioContext = window.AudioContext || window.webkitAudioContext;
             let audioCtx = null;
+            let nPrints = 0;
             
             
             /**
@@ -93,6 +94,14 @@
             // Async function to call getting an audio buffer
             async function loadFile(filePath) {
                 const track = await fetchFile(filePath);
+                
+                if(nPrints == 0) {
+                    // console.log(track);
+                    console.dir(track, {depth:null});
+                    console.log(`${track.numberOfChannels}, ${track.length}, ${track.sampleRate}`);
+                    // nPrints++;
+                }
+                
                 return track;
             }
             
@@ -100,9 +109,36 @@
             // Function to play tracks
             function playTrack(audioBuffer) {
                 
+                // Re-construct a reversed version of the input track
+                let channelIter_0 = audioBuffer.getChannelData(0).reverse().values();
+                let channelIter_1 = audioBuffer.getChannelData(1).reverse().values();
+                let channel_0 = [];
+                let chan0_sum = 0;
+                let channel_1 = [];
+                let chan1_sum = 0;
+                for (const val of channelIter_0) {
+                    channel_0.push(val);
+                    chan0_sum = chan0_sum + val;
+                }
+                for (const val of channelIter_1) {
+                    channel_1.push(val);
+                    chan1_sum = chan1_sum + val;
+                }
+                console.log(`${chan0_sum} =? ${chan1_sum}`);
+                let reverseBuffer = audioCtx.createBuffer(audioBuffer.numberOfChannels, audioBuffer.length, audioBuffer.sampleRate);
+                let chanBuff = reverseBuffer.getChannelData(0);
+                chanBuff = channel_0;
+                chanBuff = reverseBuffer.getChannelData(1);
+                chanBuff = channel_1;
+                console.log(reverseBuffer.getChannelData(1))
+                
+                
                 // Create an audio source node and add the input to it
                 const trackSource = audioCtx.createBufferSource();
                 trackSource.buffer = audioBuffer;
+
+                
+                // console.dir(trackSource.buffer, {depth: null});
                 
                 // Connect the node to the audio context
                 trackSource.connect(audioCtx.destination);

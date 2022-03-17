@@ -31,9 +31,9 @@ clientS3.createBucket(params, function(err, data) {
 
 
 // List buckets
-const listPromise = function (clientS3) {
-    return clientS3.listBuckets().promise();
-}
+const listPromise = await clientS3.listBuckets().promise();
+let buckets = listPromse.Buckets;
+console.log(buckets);
 
 
 // Handle promise output

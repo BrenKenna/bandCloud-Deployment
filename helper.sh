@@ -54,7 +54,7 @@ Server listening on port = 8000, address = 127.0.0.1
 ##############################################
 
 # Copy files
-ssh -i bandCloud.pem ec2-user@ec2-34-244-43-187.eu-west-1.compute.amazonaws.com  "mkdir -p ~/hostedApp/app"
+ssh -i bandCloud.pem ec2-user@ec2-54-194-66-202.eu-west-1.compute.amazonaws.com  "mkdir -p ~/hostedApp/app"
 scp -i bandCloud.pem -r app/* ec2-user@ec2-54-155-250-180.eu-west-1.compute.amazonaws.com:~/hostedApp/app/
 
 # Login
@@ -123,7 +123,7 @@ scp -i bandCloud.pem certs/* ec2-user@ec2-54-74-102-170.eu-west-1.compute.amazon
 ###############
 
 # Sanity check
-ssh -i bandCloud.pem ec2-user@ec2-52-16-106-49.eu-west-1.compute.amazonaws.com
+ssh -i bandCloud.pem ec2-user@ec2-34-244-43-187.eu-west-1.compute.amazonaws.com 
 
 # Get app
 mkdir -p ~/bandCloud

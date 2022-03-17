@@ -3,7 +3,7 @@
  */
 
 // Server and additional modules
-const https = require('http'), 
+const https = require('https'), 
     express = require('express'),
     path = require('path'),
     fs = require('fs');

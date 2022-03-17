@@ -32,5 +32,14 @@ const printBucket = function(lsProm) {
     });
 }
 
+
+const bucketList = (clientS3) => {
+    const listPromise = await clientS3.listBuckets().promise();
+    let buckets = listPromse.Buckets;
+    console.log(buckets);
+    return buckets
+}
+
+
 // Export
-module.exports = {listPromise, printBucket};
+module.exports = {listPromise, printBucket, bucketList};
