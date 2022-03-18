@@ -111,7 +111,8 @@
                 
 
                 // Create an audio source node and add the input to it
-                // audioBuffer.getChannelData(0).reverse();
+                audioBuffer.getChannelData(0).reverse();
+                audioBuffer.getChannelData(1).reverse();
                 const trackSource = audioCtx.createBufferSource();
                 trackSource.buffer = audioBuffer;
 
@@ -136,6 +137,7 @@
                 
                 
                 // Return the track
+                console.dir(trackSource, {depth: null})
                 return trackSource;
             }
             

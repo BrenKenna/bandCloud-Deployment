@@ -1,0 +1,210 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <title>Web Audio Basics</title>
+        <meta name="description" content="Audio basics demo for Web Audio API">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        
+        <script type="module" src="./index.js"></script>
+    </head>
+
+
+    
+    <body>
+    
+    
+        <button id="fetchTracks">Load Tracks</button>
+        
+        <button id="playBtn">Play</button>
+    
+        
+        <script type="module">
+        
+            // Cross browser
+            import {audioBufferToWav} from './index.js';
+            
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            let audioCtx = null;
+            let tracksLoaded = false;
+            
+            // Get Major elements: Load Tracks, List items = tracks
+            const startButton = document.querySelector("#fetchTracks");
+            const playButton = document.querySelector("#playBtn");
+            
+        
+            // Funtion to instantiate audio context
+            function initAudio(){
+                
+                // Instantiate if not already
+                if( !audioCtx) {
+                    audioCtx = new AudioContext();
+                }
+            }
+            
+            
+            // Async function to return an audio buffer from a url
+            async function fetchFile(filepath) {
+                
+                // Await the request of array buffer
+                const response = await fetch(filepath);
+                const arrayBuffer = await response.arrayBuffer();
+                
+                // Decode array buffer to an audio buffer
+                const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+                
+                // Return usable track
+                return audioBuffer;
+            }
+            
+            
+            // Async function to call getting an audio buffer
+            async function loadFile(filePath1, filePath2) {
+                
+                // Load both tracks
+                const track = await fetchFile(filePath1);
+                const track2 = await fetchFile(filePath2);
+                
+                // Mix Audio
+                const output = mixAudio(track, track2);
+                return output;
+            }
+            
+            
+            // Mix two audio buffers into one audio buffer
+            function mixAudio(audioBuffer_1, audioBuffer_2){
+                
+                // Initalize largest
+                console.dir(audioBuffer_1, {depth: null});
+                console.dir(audioBuffer_2, {depth: null});
+                let outputBuffer, indexOfBiggest;
+                let holder = [ audioBuffer_1, audioBuffer_2 ];
+                if ( audioBuffer_1.length > audioBuffer_2.length) {
+                    console.log("Chose track 1");
+                    outputBuffer = audioCtx.createBuffer(audioBuffer_1.numberOfChannels, audioBuffer_1.length, audioBuffer_1.sampleRate);
+                    indexOfBiggest = 0;
+                } else {
+                    console.log("Chose track 2");
+                    outputBuffer = audioCtx.createBuffer(audioBuffer_2.numberOfChannels, audioBuffer_2.length, audioBuffer_2.sampleRate);
+                    indexOfBiggest = 1;
+                }
+                
+                // Populate each channel with a 32Float array
+                for(let chan = 0; chan < outputBuffer.numberOfChannels; chan++){
+                    
+                    // Initalize the new audio array
+                    let counter = 0;
+                    let newChanAudio = new Float32Array();
+                    
+                    // Populate from the smallest: Hardcoded for now
+                    let sum = 0;
+                    for( const smallest of holder[0].getChannelData(chan).values() ) {
+                        
+                        // Add two elements
+                        const elm = (smallest + holder[1].getChannelData(chan)[counter]);
+                        newChanAudio[counter] = elm;
+                        holder[1].getChannelData(chan)[counter] = elm;
+                        counter++;
+                        sum = (sum + elm); // Sanity check data has being recieved and just a bunch of zeros
+                    }
+                    
+                    // Finish populating the channel with data from the largest array
+                    console.log(`New Audio Channel-${chan+1} = ${newChanAudio.length}, ${counter}, sum = ${sum}`);
+                    for(let i = counter; i < holder[1].getChannelData(chan).length; i++) {
+                        const elm = holder[1].getChannelData(chan)[i];
+                        newChanAudio[counter] = elm;
+                        counter++;
+                        sum = (sum + elm);
+                    }
+                    
+                    /*
+                        New Audio Channel-1 = 0, 3854419, sum = 0.7897761007696866
+                        New Audio Channel-2 = 0, 3854419, sum = 0.7249838583238479
+                    */
+                    
+                    
+                    
+                    // Copy into output Buffer
+                    console.log(`Final Audio Channel-${chan+1} = ${newChanAudio.length}, ${counter}, sum = ${sum}`);
+                    audioBuffer_2.copyToChannel(newChanAudio, chan);
+                    // console.log(outputBuffer.getChannelData(chan));
+                    
+                }
+                
+                // Log completion
+                console.log("All done! :)");
+                let anchor = document.createElement('a');
+                document.body.appendChild(anchor);
+                anchor.style = 'display: none';
+                let wav = audioBufferToWav(audioBuffer_2, 32);
+                let blob = new window.Blob([ new DataView(wav) ], {
+                      type: 'audio/wav'
+                });
+
+                let url = window.URL.createObjectURL(blob);
+                anchor.href = url;
+                anchor.download = 'audio.wav';
+                anchor.click();
+                window.URL.revokeObjectURL(url);
+                console.log(wav);
+                
+                
+                return audioBuffer_2;
+            }
+            
+            
+            // Add event listeners
+            startButton.addEventListener('click', () => {
+                
+                // Handle audio context
+                initAudio();
+                
+                
+                // Load files
+                loadFile("multi-track/bass_guitar.mp3", "multi-track/drums.mp3").then( ( mixedTrack ) => {
+                    console.log("I got the track and here it is");
+                    // console.dir(mixedTrack, {depth: null});
+                    
+                    // Attach an event listener to play button
+                    playButton.addEventListener('click', () => {
+                        if( audioCtx.state == "suspended" ) {
+                                audioCtx.resume;
+                        }
+                            
+                        // Play the track
+                        const track = playTrack(mixedTrack);
+                        tracksLoaded = true;
+                        console.dir(track);
+                    });
+                } )
+                
+            });
+            
+            
+            // Function to play track
+            /*
+                Looks to be ok, but does not actually play the audio
+                Going to try just editing the array buffer, but this creates complications
+                    => Only thing that is really different between last time, but dont why it should effect results???
+            */
+            function playTrack( audioBuffer ) {
+                
+                // Generate an audio source node and attach the input track to it
+                console.log("I was recieved");
+                console.dir(audioBuffer, {depth: null});
+                const trackSource = audioCtx.createBufferSource();
+                trackSource.buffer = audioBuffer;
+                
+                // Connect node to the audio graph and start
+                trackSource.connect(audioCtx.destination);
+                trackSource.start();
+                console.dir(trackSource, {depth: null});
+                return trackSource;
+            }
+            
+        </script>
+    
+    </body>
+
+</html>
