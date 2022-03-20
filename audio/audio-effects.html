@@ -1,0 +1,211 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+    <head>
+        <title>Audio Effects</title>
+        
+        <!-- jQuery & Boostrap Stylings -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+        
+    </head>
+
+    <body>
+    
+    
+        <!-- 
+
+            Simplest form need to:
+                1. Get audio source
+                2. Pass audio through an effects & gain node
+                3. Provide options on these nodes
+                4. Play input audio on loop
+
+        -->
+        
+        <!-- Load audio button -->
+        <button id="getAudio">Load Track</button>
+        <button id="playButton">Play</button> <!-- Need a button to stop adding a new track onto it -->
+        <br><br><br><br>
+        
+        <!-- Container -->
+        <div class="container">
+            
+            <!-- Slider group -->
+            <div class="slider-group">
+                
+                <!-- Volume -->
+                <label for="volume">Volume</label>
+                <input type="range" id="volume" min="0" max="10" value="1" step="0.1" data-action="volume" list="volumeVals">
+                <datalist id="volumeVals">
+                    <option value="0" label="min">
+                    <option value="10" label="max">
+                </datalist>
+                
+                <!-- Distortion: 0-1, 0.01, Step = Default 0.4 -->
+                <br>
+                <label for="distortion">Distortion</label>
+                <input type="range" id="distortion" min="0" max="4" value="0.0" step="0.01" data-action="distortion" list="distorionVals">
+                    <datalist id="distortionVals">
+                    <option value="0" label="min">
+                    <option value="4" label="max">
+                </datalist>
+                
+            </div>
+        </div>
+    
+    
+        <script>
+        
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            let audioCtx = null;
+            let tracksLoaded = false;
+            
+            // Get Major elements: Load Tracks, List items = tracks
+            const startButton = document.querySelector("#getAudio");
+            const playButton = document.querySelector("#playButton");
+            let offset = 0;
+            
+        
+            // Funtion to instantiate audio context
+            function initAudio(){
+                
+                // Instantiate if not already
+                if( !audioCtx) {
+                    audioCtx = new AudioContext();
+                }
+            }
+            
+            
+            // Async function to return an audio buffer from a url
+            async function fetchFile(filepath) {
+                
+                // Await the request of array buffer
+                const response = await fetch(filepath);
+                const arrayBuffer = await response.arrayBuffer();
+                
+                // Decode array buffer to an audio buffer
+                const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+                
+                // Return usable track
+                return audioBuffer;
+            }
+            
+            
+            // Async function to call getting an audio buffer
+            async function loadFile(filePath1) {
+                
+                // Load both tracks
+                const track = await fetchFile(filePath1);
+                return track;
+            }
+            
+            
+            // Function to play tracks
+            function playTrack(audioBuffer) {
+                
+
+                // Create an audio source node and add the input to it
+                const trackSource = audioCtx.createBufferSource();
+                trackSource.buffer = audioBuffer;
+                
+                
+                // Add gain / volume node & get volume control data list
+                const gainNode = audioCtx.createGain();
+                trackSource.connect(gainNode);
+                const volumeControl = document.querySelector("#volume");
+                volumeControl.addEventListener('input', function() {
+                    
+                    // Set the volume to current value
+                    gainNode.gain.value = this.value;
+                }, false);
+                
+
+                // Connect distortion curve
+                console.log("\nFor distortion:");
+                const distortion = audioCtx.createWaveShaper();;
+                // distortion.oversample = '4x';
+                // distortion.curve = makeDistortionCurve(400);
+                
+                // Attach event listener to distortion node
+                const distControl = document.querySelector("#distortion");
+                distControl.addEventListener('input', function() {
+                    
+                    // Set the volume to current value
+                    distortion.curve = makeDistortionCurve(this.value*10);
+                }, false);
+                
+                
+                // Connect the node to the audio context
+                trackSource.connect(gainNode);
+                gainNode.connect(distortion);
+                distortion.connect(audioCtx.destination);
+                
+                
+                // Handle where to start playing this track
+                if ( offset == 0 ) {
+                    
+                    // From the top
+                    trackSource.start();
+                    offset = audioCtx.currentTime;
+                    
+                } else {
+                    
+                    // Via the offset
+                    trackSource.start(0, (audioCtx.currentTime - offset) );
+                }
+                
+                
+                // Return the track
+                return trackSource;
+            }
+            
+            
+            // Add event listeners
+            startButton.addEventListener('click', () => {
+                
+                // Handle audio context
+                initAudio();
+                
+                
+                // Load files
+                loadFile("multi-track/bass_guitar.mp3").then( ( mixedTrack ) => {
+                    console.log("I got the track and here it is");
+                    // console.dir(mixedTrack, {depth: null});
+                    
+                    // Attach an event listener to play button
+                    playButton.addEventListener('click', () => {
+                        if( audioCtx.state == "suspended" ) {
+                                audioCtx.resume;
+                        }
+                            
+                        // Play the track
+                        const track = playTrack(mixedTrack);
+                        tracksLoaded = true;
+                        console.dir(track);
+                    });
+                } )
+                
+            });
+            
+            
+            // Make a distorition curve
+            function makeDistortionCurve(amount) {
+                var k = typeof amount === 'number' ? amount : 50,
+                  n_samples = 44100,
+                  curve = new Float32Array(n_samples),
+                  deg = Math.PI / 180;
+                
+                for ( let i = 0 ; i < n_samples; ++i ) {
+                  let x = i * 2 / n_samples - 1;
+                  curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
+                }
+                return curve;
+            };
+
+        
+        </script>
+    
+    </body>
+</html>
