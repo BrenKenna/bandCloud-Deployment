@@ -90,6 +90,11 @@
                     indexOfBiggest = 1;
                 }
                 
+                // Add distortion curve to the bass
+                const distCurve = distortionCurve((0.4 * 50), audioBuffer_1.sampleRate);
+                audioBuffer_1.copyToChannel(distCurve, 0);
+                
+                
                 // Populate each channel with a 32Float array
                 for(let chan = 0; chan < outputBuffer.numberOfChannels; chan++){
                     
@@ -203,6 +208,19 @@
                 console.dir(trackSource, {depth: null});
                 return trackSource;
             }
+            
+            
+            // Make a distorition curve
+            function distortionCurve(amount, trackLength) {
+                let curve = new Float32Array(trackLength);
+                const deg = Math.PI / 180;
+                
+                for ( let i = 0 ; i < trackLength; ++i ) {
+                  let x = i * 2 / trackLength - 1;
+                  curve[i] = ( 3 + amount ) * x * 20 * deg / ( Math.PI + amount * Math.abs(x) );
+                }
+                return curve;
+            };
             
         </script>
     
