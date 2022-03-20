@@ -91,8 +91,17 @@
                 }
                 
                 // Add distortion curve to the bass
-                const distCurve = distortionCurve((0.4 * 50), audioBuffer_1.sampleRate);
-                audioBuffer_1.copyToChannel(distCurve, 0);
+                /**
+                const distCurve = distortionCurve((400), audioBuffer_1.length);
+                console.log(distCurve);
+                for(let chan = 0; chan < outputBuffer.numberOfChannels; chan++){ 
+                    // audioBuffer_1.copyToChannel(distCurve, chan); // Still sounds ok with copying into one channel
+                    for(let counter = 0; counter < distCurve.length; counter++) {
+                        audioBuffer_1.getChannelData(chan)[counter] = audioBuffer_1.getChannelData(chan)[counter] + distCurve[counter];
+                    }
+                }
+                */
+                
                 
                 
                 // Populate each channel with a 32Float array
@@ -107,7 +116,7 @@
                     for( const smallest of holder[0].getChannelData(chan).values() ) {
                         
                         // Add two elements
-                        const elm = ( (smallest * 4) + holder[1].getChannelData(chan)[counter]); // Mixing adds, Multiplying & Dividing sounds mad, polynomials are daft and one swamps the other
+                        const elm = ( (smallest*1.75) +  (holder[1].getChannelData(chan)[counter] * 1.5)); // Mixing adds, Multiplying & Dividing sounds mad, polynomials are daft and one swamps the other
                         newChanAudio[counter] = elm;
                         holder[1].getChannelData(chan)[counter] = elm;
                         counter++;
@@ -132,7 +141,8 @@
                     
                     // Copy into output Buffer
                     console.log(`Final Audio Channel-${chan+1} = ${newChanAudio.length}, ${counter}, sum = ${sum}`);
-                    audioBuffer_2.copyToChannel(newChanAudio, chan);
+                    // Not needed since the data has been added
+                    // audioBuffer_2.copyToChannel(newChanAudio, chan);
                     // console.log(outputBuffer.getChannelData(chan));
                     
                 }
@@ -142,7 +152,7 @@
                 let anchor = document.createElement('a');
                 document.body.appendChild(anchor);
                 anchor.style = 'display: none';
-                let wav = audioBufferToWav(audioBuffer_2, 32);
+                let wav = audioBufferToWav(audioBuffer_2, 32); // Smallest was added to the biggest
                 let blob = new window.Blob([ new DataView(wav) ], {
                       type: 'audio/wav'
                 });
