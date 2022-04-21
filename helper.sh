@@ -4,6 +4,13 @@
 #######################################
 #
 # Notes on how to do background things
+# 
+# Next main steps:
+#   a). Load balancing domain (enable registration)
+#   b). Registration in an ECR repo
+#        => Fix for undefined
+#
+#   c). Start consolidating into the app
 #
 ########################################
 ########################################
@@ -126,8 +133,8 @@ scp -i bandCloud.pem certs/* ec2-user@ec2-54-74-102-170.eu-west-1.compute.amazon
 ssh -i bandCloud.pem ec2-user@ec2-34-244-43-187.eu-west-1.compute.amazonaws.com 
 
 # Get app
-mkdir -p ~/bandCloud
-cd ~/bandCloud
+mkdir -p /workspace/bandCloud
+cd /workspace/bandCloud
 sudo yum update -y
 aws s3 cp s3://bandcloud/app/bandCloud-App.tar.gz ./
 tar -xf bandCloud-App.tar.gz
@@ -142,6 +149,18 @@ npm i aws-sdk express
 
 # Start app
 node app/index.js
+
+
+###############
+# 
+# Other
+# 
+###############
+
+
+# Issue pre-signed URL: Does not work for directory
+aws s3 presign s3://bandcloud/test/test.txt --expires-in 120
+
 
 
 ##############################
@@ -164,3 +183,37 @@ curl -k -X POST https://localhost:8080/login -H "Content-Type: application/json"
 Postman recieves response but a
 
 """
+
+# Post to web app
+curl -k -X POST http://3.249.240.203:8080/reg -H "Content-Type: application/json" -d '{"username": "tom", "password": apples, "email": "hello@yolo.com"}'
+
+
+###################################
+# 
+# Terraform
+# 
+###################################
+
+
+# centos/amz linux: swap AmazonLinux for REHL
+sudo yum install -y yum-utils
+sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+sudo yum -y install terraform
+
+
+export AWS_ACCESS_KEY=$(grep "id" ~/.aws/credentials | cut -d \= -f 2 | sed 's/ \+//g')
+export AWS_SECRET_ACCESS_KEY=$(grep "secret" ~/.aws/credentials | cut -d \= -f 2 | sed 's/ \+//g')
+
+
+# Initalize and inspect
+terraform init
+teraform plan # Output here quite useful to check TF related vars etc
+
+# Create/update infrastructure
+terraform apply
+
+# Destroy infrastructure
+terraform destory
+
+# List resource in state
+teraform state list

@@ -10,7 +10,8 @@ const https = require('http'),
     express = require('express'),
     path = require('path'),
     AWS = require('aws-sdk'),
-    crypto = require('crypto')
+    crypto = require('crypto'),
+    cookieParser = require('cookie-parser')
 ;
 
 
@@ -31,6 +32,7 @@ router.use(express.json());
 router.use('/', express.static(path.resolve(__dirname, 'main')));
 router.use('/registration', express.static(path.resolve(__dirname, 'registration')));
 router.use('/auth', express.static(path.resolve(__dirname, 'auth')));
+app.use(express.cookieParser());
 
 
 // Registration endpoint
@@ -47,6 +49,7 @@ router.post('/reg', function(req, resp) {
     userToken = crypto.randomUUID();
     userTerm = (req.body.password.replace("'", "") + userToken);
     userTerm = hash.update(userTerm, 'utf-8').digest('hex');
+
 
     // Format query
     let params = {
@@ -80,10 +83,11 @@ router.post('/reg', function(req, resp) {
 
         } else {
 
-            // Send and handle response
+            // Send and handle response with api key
+            let apiKey = hash.update(crypto.randomUUID(), 'utf-8').digest('hex');
             resp.status(200);
+            resp.cookie('auth', apiKey, { maxAge: (24 * 60 * 60 * 1000), httpOnly: true }); // 24 hours
             resp.sendFile( (path.resolve(__dirname, 'homepage') + '/index.html') );
-            // console.dir(params, {depth: null});
         }
     });
 });

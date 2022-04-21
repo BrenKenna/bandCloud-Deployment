@@ -25,6 +25,11 @@
             // Cross browser
             import {audioBufferToWav} from './index.js';
             
+            document.cookie = 'SameSite=Strict';
+            document.cookie = 'Secure=Http';
+            console.log(document.cookie);
+            console.log( downloads.showDefaultFolder() );
+            
             const AudioContext = window.AudioContext || window.webkitAudioContext;
             let audioCtx = null;
             let tracksLoaded = false;
@@ -91,7 +96,6 @@
                 }
                 
                 // Add distortion curve to the bass
-                /**
                 const distCurve = distortionCurve((400), audioBuffer_1.length);
                 console.log(distCurve);
                 for(let chan = 0; chan < outputBuffer.numberOfChannels; chan++){ 
@@ -100,7 +104,6 @@
                         audioBuffer_1.getChannelData(chan)[counter] = audioBuffer_1.getChannelData(chan)[counter] + distCurve[counter];
                     }
                 }
-                */
                 
                 
                 
