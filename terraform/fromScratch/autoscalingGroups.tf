@@ -6,6 +6,7 @@
 
 # First subnet
 resource "aws_autoscaling_group" "asg-pubsub-1a" {
+    name = "tf-asg-1a"
     launch_configuration = aws_launch_configuration.terraformLC-1a.id
     vpc_zone_identifier = [ aws_subnet.pubSub_A.id ]
     health_check_type = "ELB"
@@ -14,7 +15,7 @@ resource "aws_autoscaling_group" "asg-pubsub-1a" {
 
     tag {
         key = "Name"
-        value = "terraform-asg-1a"
+        value = "tf-asg-1a"
         propagate_at_launch = true
     }
 }
@@ -28,6 +29,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_elb-1a" {
 
 # Second subnet
 resource "aws_autoscaling_group" "asg-pubsub-1b" {
+    name = "tf-asg-1b"
     launch_configuration = aws_launch_configuration.terraformLC-1b.id
     vpc_zone_identifier = [ aws_subnet.pubSub_B.id ]
     health_check_type = "ELB"
@@ -36,7 +38,7 @@ resource "aws_autoscaling_group" "asg-pubsub-1b" {
 
     tag {
         key = "Name"
-        value = "terraform-asg-1b"
+        value = "tf-asg-1b"
         propagate_at_launch = true
     }
 }

@@ -18,5 +18,7 @@ variable "ec2_vars" {
         iamRole  = "S3_Dynamo"
         key = "bandCloud"
         instanceType = "t2.micro"
+        ami_1a = "ami-05be68f5425399abd"
+        ami_1b = "ami-09aba1ee0015fc959"
     }
 }

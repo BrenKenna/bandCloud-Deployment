@@ -6,7 +6,9 @@
 
 # Launch config
 resource "aws_launch_configuration" "terraformLC-1a" {
-    image_id = aws_ami.terraform-example-1a.id
+    name = "tf-app-1a"
+    # image_id = aws_ami.terraform-example-1a.id
+    image_id = var.ec2_vars["ami_1a"]
     instance_type = var.ec2_vars["instanceType"]
     key_name = var.ec2_vars["key"]
     security_groups = [ aws_security_group.sg22.id, aws_security_group.httpAnywhere.id ]
@@ -20,7 +22,7 @@ resource "aws_launch_configuration" "terraformLC-1a" {
                 tar -xf bandCloud-App.tar.gz && cd hostedApp
                 curl -sL https://rpm.nodesource.com/setup_14.x | sudo bash -
                 sudo yum install -y nodejs gcc-c++ make git
-                sudo npm i aws-sdk express
+                sudo npm i aws-sdk express cookie-parser
                 nohup sudo node app/dynamo/dynamo-server.js &>> /workspace/webApplog-2.txt &
                 EOF
 }
@@ -33,7 +35,9 @@ resource "aws_launch_configuration" "terraformLC-1a" {
 ###########################
 
 resource "aws_launch_configuration" "terraformLC-1b" {
-    image_id = aws_ami.terraform-example-1b.id
+    name = "tf-app-1b"
+    # image_id = aws_ami.terraform-example-1b.id
+    image_id = var.ec2_vars["ami_1b"]
     instance_type = var.ec2_vars["instanceType"]
     key_name = var.ec2_vars["key"]
     security_groups = [ aws_security_group.sg22.id, aws_security_group.httpAnywhere.id ]

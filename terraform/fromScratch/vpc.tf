@@ -21,6 +21,7 @@ resource "aws_subnet" "pubSub_A" {
     vpc_id = aws_vpc.terraformVPC.id
     cidr_block = var.tf_network["publicSubnet_A"]
     availability_zone = var.tf_network["availZone_A"]
+    map_public_ip_on_launch = true
     tags = {
         Name = "terraform-PubSub-A"
     }
@@ -33,6 +34,8 @@ resource "aws_subnet" "pubSub_B" {
     vpc_id = aws_vpc.terraformVPC.id
     cidr_block = var.tf_network["publicSubnet_B"]
     availability_zone = var.tf_network["availZone_B"]
+    map_public_ip_on_launch = true
+    enable_resource_name_dns_a_record_on_launch = true
     tags = {
         Name = "terraform-PubSub-B"
     }

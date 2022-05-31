@@ -10,8 +10,7 @@ const https = require('http'),
     express = require('express'),
     path = require('path'),
     AWS = require('aws-sdk'),
-    crypto = require('crypto'),
-    cookieParser = require('cookie-parser')
+    crypto = require('crypto')
 ;
 
 
@@ -32,7 +31,7 @@ router.use(express.json());
 router.use('/', express.static(path.resolve(__dirname, 'main')));
 router.use('/registration', express.static(path.resolve(__dirname, 'registration')));
 router.use('/auth', express.static(path.resolve(__dirname, 'auth')));
-app.use(express.cookieParser());
+//router.use(express.cookieParser());
 
 
 // Registration endpoint
