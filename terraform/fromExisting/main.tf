@@ -19,7 +19,7 @@ resource "aws_instance" "terraFormTesting" {
                 #!/bin/bash
                 mkdir -p /workspace/bandCloud && cd /workspace/bandCloud
                 sudo yum update -y
-                aws s3 cp s3://bandcloud/app/bandCloud-App.tar.gz ./
+                aws s3 cp s3://__/__/___/___/bandCloud-App.tar.gz ./
                 tar -xf bandCloud-App.tar.gz && cd hostedApp
                 curl -sL https://rpm.nodesource.com/setup_14.x | sudo bash -
                 sudo yum install -y nodejs gcc-c++ make git
