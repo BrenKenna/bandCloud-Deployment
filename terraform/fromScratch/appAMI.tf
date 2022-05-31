@@ -33,6 +33,10 @@ resource "aws_ami" "terraform-example-1a" {
     snapshot_id = aws_ebs_snapshot.ebs-irl-1a-Snapshot.id
     volume_size = 8
   }
+
+  tags = {
+    Name = "terraform-example-1a"
+  }
 }
 
 ##############################
@@ -68,5 +72,8 @@ resource "aws_ami" "terraform-example-1b" {
     device_name = "/dev/xvda"
     snapshot_id = aws_ebs_snapshot.ebs-irl-1a-Snapshot.id
     volume_size = 8
+  }
+  tags = {
+    Name = "terraform-example-1b"
   }
 }

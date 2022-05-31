@@ -17,15 +17,4 @@ resource "aws_instance" "terraFormTesting" {
     tags = {
         Name = "terraformApp-PubSub-A"
     }
-    user_data = <<-EOF
-                #!/bin/bash
-                mkdir -p /workspace/bandCloud && cd /workspace/bandCloud
-                sudo yum update -y
-                aws s3 cp s3://bandcloud/app/bandCloud-App.tar.gz ./
-                tar -xf bandCloud-App.tar.gz && cd hostedApp
-                curl -sL https://rpm.nodesource.com/setup_14.x | sudo bash -
-                sudo yum install -y nodejs gcc-c++ make git
-                sudo npm i aws-sdk express
-                nohup sudo node app/dynamo/dynamo-server.js &>> /workspace/webApplog-2.txt &
-                EOF
 }

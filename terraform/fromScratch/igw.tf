@@ -15,6 +15,10 @@ resource "aws_internet_gateway" "terraform_igw" {
 # Route table for adding public subnets routes to
 resource "aws_route_table" "rtb_pub" {
     vpc_id = aws_vpc.terraformVPC.id
+    route {
+        cidr_block = "0.0.0.0/0"
+        gateway_id = aws_internet_gateway.terraform_igw.id
+    }
     tags = {
         Name = "terraform-public-rtb"
     }
