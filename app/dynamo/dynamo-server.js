@@ -83,9 +83,9 @@ router.post('/reg', function(req, resp) {
         } else {
 
             // Send and handle response with api key
-            let apiKey = hash.update(crypto.randomUUID(), 'utf-8').digest('hex');
+            // let apiKey = hash.update(crypto.randomUUID(), 'utf-8').digest('hex');
+            // resp.cookie('auth', apiKey, { maxAge: (24 * 60 * 60 * 1000), httpOnly: true }); // 24 hours
             resp.status(200);
-            resp.cookie('auth', apiKey, { maxAge: (24 * 60 * 60 * 1000), httpOnly: true }); // 24 hours
             resp.sendFile( (path.resolve(__dirname, 'homepage') + '/index.html') );
         }
     });
