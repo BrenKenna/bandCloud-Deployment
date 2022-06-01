@@ -34,7 +34,7 @@ resource "aws_launch_configuration" "terraformLC-1a" {
                 docker pull $REPO &>> /workspace/sanity-check.txt
 
                 # Run container
-                docker run -d -p $PORT_VALS $REPO node app/dynamo-server.js &>> /workspace/webApplog-2.txt
+                docker run -d -p $PORT_VALS $REPO node app/dynamo-server.js &>> /workspace/webApplog.txt
                 EOF
 }
 
@@ -74,6 +74,6 @@ resource "aws_launch_configuration" "terraformLC-1b" {
                 docker pull ${var.ecr_vars["repo"]} &>> /workspace/sanity-check.txt
 
                 # Run container
-                docker run -d -p ${var.ecr_vars["port"]} ${var.ecr_vars["repo"]} node app/dynamo-server.js &>> /workspace/webApplog-2.txt
+                docker run -d -p ${var.ecr_vars["port"]} ${var.ecr_vars["repo"]} node app/dynamo-server.js &>> /workspace/webApplog.txt
                 EOF
 }

@@ -1,8 +1,9 @@
-##################################
+##################################################################
 # 
 # Spinup Instance in new VPC
+#   - Intentionally making use of UD & variables.tf scoped vars 
 # 
-##################################
+##################################################################
 
 # Spin up example instance from image
 resource "aws_instance" "terraFormTesting-a" {
@@ -38,7 +39,7 @@ resource "aws_instance" "terraFormTesting-a" {
                 docker pull $REPO &>> /workspace/sanity-check.txt
 
                 # Run container
-                docker run -d -p $PORT_VALS $REPO node app/dynamo-server.js &>> /workspace/webApplog-2.txt
+                docker run -d -p $PORT_VALS $REPO node app/dynamo-server.js &>> /workspace/webApplog.txt
                 EOF
 }
 
@@ -77,6 +78,6 @@ resource "aws_instance" "terraFormTesting-b" {
                 docker pull ${var.ecr_vars["repo"]} &>> /workspace/sanity-check.txt
 
                 # Run container
-                docker run -d -p ${var.ecr_vars["port"]} ${var.ecr_vars["repo"]} node app/dynamo-server.js &>> /workspace/webApplog-2.txt
+                docker run -d -p ${var.ecr_vars["port"]} ${var.ecr_vars["repo"]} node app/dynamo-server.js &>> /workspace/webApplog.txt
                 EOF
 }
