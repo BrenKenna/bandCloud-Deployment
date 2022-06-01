@@ -217,3 +217,34 @@ terraform destory
 
 # List resource in state
 teraform state list
+
+
+
+##################################
+# 
+# ECR
+# 
+##################################
+
+
+# Install & login
+sudo yum install -y amazon-linux-extras docker
+sudo service docker start
+sudo usermod -a -G docker ec2-user
+pass=$(aws ecr get-login-password --region eu-west-1)
+docker login --username AWS -p ${pass} 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud
+
+
+# Build & push
+sudo docker build -t bandcloud .
+sudo docker tag bandcloud:latest 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud:latest
+sudo docker push 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud:latest
+
+# Check
+sudo docker images
+
+
+# Test run
+sudo docker run -d -p 8080:8080 bandcloud node app/dynamo-server.js
+sudo docker ps
+sudo docker stats

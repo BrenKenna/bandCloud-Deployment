@@ -16,14 +16,25 @@ resource "aws_launch_configuration" "terraformLC-1a" {
     associate_public_ip_address = true
     user_data = <<-EOF
                 #!/bin/bash
-                mkdir -p /workspace/bandCloud && cd /workspace/bandCloud
+
+                # Setup and install docker
+                sudo mkdir /workspace && cd /workspace
                 sudo yum update -y
-                aws s3 cp s3://bandcloud/app/bandCloud-App.tar.gz ./
-                tar -xf bandCloud-App.tar.gz && cd hostedApp
-                curl -sL https://rpm.nodesource.com/setup_14.x | sudo bash -
-                sudo yum install -y nodejs gcc-c++ make git
-                sudo npm i aws-sdk express cookie-parser
-                nohup sudo node app/dynamo/dynamo-server.js &>> /workspace/webApplog-2.txt &
+                sudo yum install -y docker
+                sudo service docker start
+                sudo usermod -a -G docker ec2-user
+
+                # Fetch repo
+                aws s3 cp s3://bandcloud/app/ud-conf.txt ./
+                REGION=$(grep "region" ud-conf.txt | cut -d \= -f 2)
+                REPO=$(grep "repo" ud-conf.txt | cut -d \= -f 2)
+                PORT_VALS=$(grep "port" ud-conf.txt | cut -d \= -f 2)
+                sudo echo -e "$REGION,$REPO,$PORT_VALS" > /workspace/sanity-check.txt
+                $(aws ecr get-login-password --region $REGION) | docker login --username AWS --password-stdin $REPO &>> /workspace/sanity-check.txt
+                docker pull $REPO &>> /workspace/sanity-check.txt
+
+                # Run container
+                docker run -d -p $PORT_VALS $REPO node app/dynamo-server.js &>> /workspace/webApplog-2.txt
                 EOF
 }
 
@@ -45,13 +56,24 @@ resource "aws_launch_configuration" "terraformLC-1b" {
     associate_public_ip_address = true
     user_data = <<-EOF
                 #!/bin/bash
-                mkdir -p /workspace/bandCloud && cd /workspace/bandCloud
+
+                # Setup and install docker
+                sudo mkdir /workspace && cd /workspace
                 sudo yum update -y
-                aws s3 cp s3://bandcloud/app/bandCloud-App.tar.gz ./
-                tar -xf bandCloud-App.tar.gz && cd hostedApp
-                curl -sL https://rpm.nodesource.com/setup_14.x | sudo bash -
-                sudo yum install -y nodejs gcc-c++ make git
-                sudo npm i aws-sdk express
-                nohup sudo node app/dynamo/dynamo-server.js &>> /workspace/webApplog-2.txt &
+                sudo yum install -y docker
+                sudo service docker start
+                sudo usermod -a -G docker ec2-user
+
+                # Fetch repo
+                aws s3 cp s3://bandcloud/app/ud-conf.txt ./
+                REGION=$(grep "region" ud-conf.txt | cut -d \= -f 2)
+                REPO=$(grep "repo" ud-conf.txt | cut -d \= -f 2)
+                PORT_VALS=$(grep "port" ud-conf.txt | cut -d \= -f 2)
+                sudo echo -e "${var.ecr_vars["region"]},${var.ecr_vars["repo"]},${var.ecr_vars["port"]} " > /workspace/sanity-check.txt
+                $(aws ecr get-login-password --region ${var.ecr_vars["region"]}) | docker login --username AWS --password-stdin ${var.ecr_vars["repo"]} &>> /workspace/sanity-check.txt
+                docker pull ${var.ecr_vars["repo"]} &>> /workspace/sanity-check.txt
+
+                # Run container
+                docker run -d -p ${var.ecr_vars["port"]} ${var.ecr_vars["repo"]} node app/dynamo-server.js &>> /workspace/webApplog-2.txt
                 EOF
 }

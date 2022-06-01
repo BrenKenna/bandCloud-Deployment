@@ -13,6 +13,7 @@ variable "tf_network" {
 
 # Map for instance variables
 variable "ec2_vars" {
+    description = "Map of core standard variables for EC2"
     type = map
     default = {
         iamRole  = "S3_Dynamo"
@@ -20,5 +21,17 @@ variable "ec2_vars" {
         instanceType = "t2.micro"
         ami_1a = "ami-05be68f5425399abd"
         ami_1b = "ami-09aba1ee0015fc959"
+    }
+}
+
+
+# ECR
+variable "ecr_vars" {
+    description = "Map of core variables for ECR"
+    type = map
+    default = {
+        region = "eu-west-1"
+        port = "8080:8080"
+        repo = "017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud"
     }
 }
