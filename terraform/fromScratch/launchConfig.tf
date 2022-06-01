@@ -11,7 +11,7 @@ resource "aws_launch_configuration" "terraformLC-1a" {
     image_id = var.ec2_vars["ami_1a"]
     instance_type = var.ec2_vars["instanceType"]
     key_name = var.ec2_vars["key"]
-    security_groups = [ aws_security_group.sg22.id, aws_security_group.httpAnywhere.id ]
+    security_groups = [ aws_security_group.httpAnywhere.id ]
     iam_instance_profile  = var.ec2_vars["iamRole"]
     associate_public_ip_address = true
     user_data = <<-EOF
@@ -53,7 +53,7 @@ resource "aws_launch_configuration" "terraformLC-1b" {
     image_id = var.ec2_vars["ami_1b"]
     instance_type = var.ec2_vars["instanceType"]
     key_name = var.ec2_vars["key"]
-    security_groups = [ aws_security_group.sg22.id, aws_security_group.httpAnywhere.id ]
+    security_groups = [ aws_security_group.httpAnywhere.id ]
     iam_instance_profile  = var.ec2_vars["iamRole"]
     associate_public_ip_address = true
     user_data = <<-EOF
