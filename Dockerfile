@@ -4,12 +4,12 @@ WORKDIR /workspace/
 
 # Install updates & things around node
 RUN yum update -y \
-    && yum install -y amazon-linux-extras gcc-c++ make git aws-cli tar time hostname
+    && yum install -y amazon-linux-extras gcc-c++ make git aws-cli tar time hostname jq
 
 # Install node
 RUN curl -sL https://rpm.nodesource.com/setup_14.x | bash - \
     && yum install -y nodejs \
-    && npm i -g aws-sdk express cookie-parser
+    && npm i -g aws-sdk express
 
 # Install app
 RUN aws s3 cp s3://bandcloud/app/bandCloud-Docker.tar.gz ./ \

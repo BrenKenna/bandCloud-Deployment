@@ -228,38 +228,40 @@ teraform state list
 
 
 # Update node-server
+cd ~
 rm -f bandCloud-Docker.tar.gz
 tar -czf bandCloud-Docker.tar.gz bandCloud-App/
 aws s3 cp bandCloud-Docker.tar.gz s3://bandcloud/app/
 
 
 # Install & login
+rm -f ~/.docker/config.json
 sudo yum install -y amazon-linux-extras docker
 sudo service docker start
 sudo usermod -a -G docker ec2-user
-pass=$(aws ecr get-login-password --region eu-west-1)
-docker login --username AWS -p ${pass} 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud
+aws ecr get-login-password | docker login --username AWS --password-stdin 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud
 
 
 # Build & push
-cd bandCloud-App
-sudo docker build --no-cache -t bandcloud .
-sudo docker tag bandcloud:latest 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud:latest
-sudo docker push 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud:latest
+cd ~/bandCloud-App
+docker build --no-cache -t bandcloud .
+docker tag bandcloud:latest 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud:latest
+docker push 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud:latest
 docker image rm bandcloud
 
+
 # List local images
-sudo docker images
+docker images
 
 # Test run in background & check-in
-sudo docker run -d -p 8080:8080 bandcloud node app/dynamo-server.js
-sudo docker ps
-sudo docker stats
+docker run -d -p 8080:8080 bandcloud node app/dynamo-server.js
+docker ps
+docker stats
 
 
 # Run interactively
-sudo docker run -it -p 8080:8080 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud
-node app/dynamo-server.js
+docker run -it -p 8080:8080 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud
+bash app/launchServer.sh
 
 
 # Maintenance: Disk usage, clearable containers, remove them
