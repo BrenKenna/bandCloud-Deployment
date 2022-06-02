@@ -35,11 +35,11 @@ resource "aws_instance" "terraFormTesting-a" {
                 REPO=$(grep "repo" ud-conf.txt | cut -d \= -f 2)
                 PORT_VALS=$(grep "port" ud-conf.txt | cut -d \= -f 2)
                 echo -e "$REGION,$REPO,$PORT_VALS" > /workspace/sanity-check.txt
-                $(aws ecr get-login-password | docker login --username AWS --password-stdin $REPO) &>> /workspace/sanity-check.txt
+                $(aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $REPO) &>> /workspace/sanity-check.txt
                 docker pull $REPO &>> /workspace/sanity-check.txt
 
                 # Run container
-                docker run -d -p $PORT_VALS $REPO bash app/launchServer.sh &>> /workspace/webApplog.txt
+                docker run -d -p $PORT_VALS $REPO bash app/launchServer.sh $REGION &>> /workspace/webApplog.txt
                 EOF
 }
 
@@ -70,10 +70,10 @@ resource "aws_instance" "terraFormTesting-b" {
 
                 # Fetch repo
                 echo -e "${var.ecr_vars["region"]},${var.ecr_vars["repo"]},${var.ecr_vars["port"]} " > /workspace/sanity-check.txt
-                $(aws ecr get-login-password | docker login --username AWS --password-stdin ${var.ecr_vars["repo"]}) &>> /workspace/sanity-check.txt
+                $(aws ecr get-login-password --region ${var.ecr_vars["region"]} | docker login --username AWS --password-stdin ${var.ecr_vars["repo"]}) &>> /workspace/sanity-check.txt
                 docker pull ${var.ecr_vars["repo"]} &>> /workspace/sanity-check.txt
 
                 # Run container
-                docker run -d -p ${var.ecr_vars["port"]} ${var.ecr_vars["repo"]} node app/dynamo-server.js &>> /workspace/webApplog.txt
+                docker run -d -p ${var.ecr_vars["port"]} ${var.ecr_vars["repo"]} bash app/launchServer.sh ${var.ecr_vars["region"]} &>> /workspace/webApplog.txt
                 EOF
 }

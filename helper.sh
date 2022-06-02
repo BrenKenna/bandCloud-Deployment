@@ -247,6 +247,8 @@ cd ~/bandCloud-App
 docker build --no-cache -t bandcloud .
 docker tag bandcloud:latest 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud:latest
 docker push 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud:latest
+
+
 docker image rm bandcloud
 
 
@@ -261,18 +263,18 @@ docker stats
 
 # Run interactively
 docker run -it -p 8080:8080 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud
-bash app/launchServer.sh
+bash app/launchServer.sh eu-west-1
 
 
 # Maintenance: Disk usage, clearable containers, remove them
 docker system df
 docker ps --filter status=exited --filter status=dead -q
 docker rm $(docker ps --filter=status=exited --filter=status=dead -q)
-docker container prune
+docker container prune -f
 
 
 # Prune images
-docker image prune
+docker image prune -f
 
 
 

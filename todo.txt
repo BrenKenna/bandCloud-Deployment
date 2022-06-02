@@ -2,6 +2,7 @@
     - Build the script from main instance.
     - Debug any IAM issues on bastion servers.
     - Test on servers behind ELB.
+    => Needed to provide regions (ECR login & ELB-V2 list) & attach a policy to allow read access ELB
 
  2. Java: PCM fun white noise & read/write, then send
  3. Java: AWS-SDK Dynamo + S3
