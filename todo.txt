@@ -1,0 +1,9 @@
+ 1. A "launch_app.sh" in bandcloud container that updates html pages with ELB.
+    - Build the script from main instance.
+    - Debug any IAM issues on bastion servers.
+    - Test on servers behind ELB.
+
+ 2. Java: PCM fun white noise & read/write, then send
+ 3. Java: AWS-SDK Dynamo + S3
+ 4. Java Spring App with the above.
+ 5. Test deployment

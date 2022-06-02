@@ -39,7 +39,7 @@
                 // Send post
                 $.ajax({
                     type: 'post',
-                    url: 'http://tf-app-elb-718339574.eu-west-1.elb.amazonaws.com:8080/login',
+                    url: 'http://TEMPLATE_ELB_DNS/login',
                     dataType: 'html',
                     contentType: 'application/json; charset=utf-8',
                     data: msg,

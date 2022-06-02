@@ -271,3 +271,28 @@ docker container prune
 
 # Prune images
 docker image prune
+
+
+
+###################################
+#
+# Webserver Launch Script
+#
+###################################
+
+# Login
+ssh -i bandCloud.pem ec2-user@ec2-34-247-12-14.eu-west-1.compute.amazonaws.com
+
+
+# ELB
+ELB_DNS=$(aws elbv2 describe-load-balancers --names "tf-app-elb" | jq .LoadBalancers[0].DNSName | sed 's/"//g')
+cd app
+for toEdit in $(find . -name "index.html" | cut -d \/ -f 2-)
+    do
+    sed "s/TEMPLATE_ELB_DNS/${ELB_DNS}/g" ${toEdit} > ${toEdit}.out
+    mv ${toEdit}.out ${toEdit} 
+done
+
+
+# Run server
+node app/dynamo-server.js
