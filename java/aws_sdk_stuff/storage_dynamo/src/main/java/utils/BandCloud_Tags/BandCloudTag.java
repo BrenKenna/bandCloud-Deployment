@@ -1,5 +1,11 @@
 package utils.BandCloud_Tags;
 
+
+/**
+ * 
+ * @author kenna
+ *
+ */
 public abstract class BandCloudTag {
 
 	private String key;

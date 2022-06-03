@@ -4,6 +4,12 @@ import java.util.Date;
 
 import com.amazonaws.services.ec2.model.Instance;
 
+
+/**
+ * 
+ * @author kenna
+ *
+ */
 public class InfoVMs {
 	
 	private String imageId, instanceId, instanceName, instanceType,

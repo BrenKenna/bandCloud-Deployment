@@ -1,5 +1,11 @@
 package com.aws_examples.storage_dyname.model;
 
+
+/**
+ * 
+ * @author kenna
+ *
+ */
 public class DynamoModel {
 
 	private String username, email;

@@ -3,6 +3,12 @@ package utils.BandCloud_Tags;
 import java.net.URL;
 import java.util.Date;
 
+
+/**
+ * 
+ * @author kenna
+ *
+ */
 public enum BandCloudTags {
 
 	FILE_TAG {

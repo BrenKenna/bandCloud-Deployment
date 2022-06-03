@@ -15,6 +15,11 @@ import com.amazonaws.services.dynamodbv2.model.GetItemRequest;
 
 
 
+/**
+ * 
+ * @author kenna
+ *
+ */
 public class DynamoUtils {
 
 	// Attributes

@@ -24,6 +24,12 @@ import com.aws_examples.storage_dyname.model.StorageFiles;
 import utils.AWS_Utils;
 import utils.DynamoUtils;
 
+
+/**
+ * 
+ * @author kenna
+ *
+ */
 @RestController
 public class StorageController {
 
