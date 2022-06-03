@@ -10,8 +10,16 @@
       => Could be a pain in the ass with containers
       => Fiddle about more later + scope out alternatives
 
- 3. Java Spring App with the above:
-   - Given spring tutorials combined it with spring web
-   - Currently responds with adjusted models about S3, Dynamo
+ 3. Java Spring App which passes requests to AWS services:
+   - Currently responds with adjusted models about S3, Dynamo.
+   - Add file upload to S3 part
+   - Work on DynamoDB models
 
- 5. Test deployment
+ 5. Deployment:
+    - Adjust server settings
+    - Build & run on ec2
+    - Setup container
+    - Add subnet & elm etc to terraform config.
+
+6. Ionic File Explorer Style App:
+    - Replaces current node-express app, but different container.
