@@ -12,7 +12,6 @@
 
  3. Java Spring App with the above:
    - Given spring tutorials combined it with spring web
-   - Currently responds with adjusted models about S3 & EC2
-   - Idea is that these data populate Ionic-App or 
+   - Currently responds with adjusted models about S3, Dynamo
 
  5. Test deployment

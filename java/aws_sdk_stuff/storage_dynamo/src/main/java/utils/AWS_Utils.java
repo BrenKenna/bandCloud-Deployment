@@ -50,7 +50,7 @@ public class AWS_Utils {
 	 * 
 	 */
 	private AWS_Utils() {
-		this.credentials = new BasicAWSCredentials("AKIAQIE6HOZRUGFBEJ7D", "0B7mKoVkxlNNcmCGkUO6WNile6BlImUYZSKFh8Em");
+		this.credentials = new BasicAWSCredentials("", "");
 		this.s3client = AmazonS3ClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(credentials))
 				  .withRegion(Regions.EU_WEST_1)
 				  .build();
