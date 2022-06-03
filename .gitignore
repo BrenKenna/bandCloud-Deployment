@@ -6,4 +6,11 @@ app/node_modules
 .git
 *sh
 tfWebApp.tar.gz
-java
+*zip
+*jar
+.gitignore
+*mp3
+mvn*
+maven*
+*classpath
+.project

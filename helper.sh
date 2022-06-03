@@ -300,3 +300,29 @@ done
 
 # Run server
 node app/dynamo-server.js
+
+
+
+#################################
+# 
+# S3 Stuff:
+#   a). Presigned URL
+#   b). Tagging
+# 
+#################################
+
+
+# Generate pre-signed URL for an S3 object that expires in 60s
+aws s3 presign s3://bandcloud/test/test.txt --expires 60
+
+
+# Tag an s3 file
+aws s3api put-object-tagging --bucket bandcloud --key test/test.txt --tagging '{"TagSet": [{ "Key": "Creator", "Value": "Me" }]}'
+
+
+# Drop tag on s3 file
+aws s3api delete-object-tagging --bucket bandcloud --key test/test.txt
+
+
+# Get an S3 tag
+aws s3api get-object-tagging --bucket bandcloud --key test/test.txt | jq .TagSet[0].Value | sed 's/"//g'
