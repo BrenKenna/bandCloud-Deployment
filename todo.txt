@@ -17,8 +17,20 @@
 
  5. Deployment:
     - Adjust server settings
+         => Not needed, accesible from outside ec2
+
     - Build & run on ec2
+         => Swapped from maven to gradle project works fine on EC2
+         => Need to consider mulitpart upload
+         => Can either install java-16 via aws-corretto or adjust eclipse project java-18
+               => Java-18 & update code as needed for most recent versions
+                     => AWS-SDK & JAVAX-Bind
+                     => After mulitpart upload
+         
     - Setup container
+         => Install Java
+         => Fetch app
+
     - Add subnet & elm etc to terraform config.
 
 6. Ionic File Explorer Style App:
