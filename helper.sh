@@ -326,3 +326,48 @@ aws s3api delete-object-tagging --bucket bandcloud --key test/test.txt
 
 # Get an S3 tag
 aws s3api get-object-tagging --bucket bandcloud --key test/test.txt | jq .TagSet[0].Value | sed 's/"//g'
+
+
+
+
+################################
+#
+# Install java-16 :(
+#
+#   - Fix Eclipse IDE later for 18
+# 
+################################
+
+
+# Install coretto-aws ?
+sudo rpm --import https://yum.corretto.aws/corretto.key 
+sudo curl -L -o /etc/yum.repos.d/corretto.repo https://yum.corretto.aws/corretto.repo
+sudo yum install -y java-16-amazon-corretto-devel
+
+
+# Check version
+java -version
+
+'
+Works fine whatever Corretto is
+
+openjdk version "16.0.2" 2021-07-20
+OpenJDK Runtime Environment Corretto-16.0.2.7.1 (build 16.0.2+7)
+OpenJDK 64-Bit Server VM Corretto-16.0.2.7.1 (build 16.0.2+7, mixed mode, sharing)
+'
+
+
+# Run server
+java -jar build/libs
+
+
+
+# Check endpoints
+curl -k -X GET http://XXX.XXX.XXX.XXX:8080/ec2
+
+'
+[{"imageId":"ami-0c1bc246476a5572b","instanceId":"i-0a9eff28b795805ad","instanceName":"tfBastion","instanceType":"t2.micro","availZone":"eu-west-1a","state":"running","hypervisor":"xen","creationDate":"2022-05-31T13:48:28.000+00:00"}
+
+
+'
+curl -k -X GET http:

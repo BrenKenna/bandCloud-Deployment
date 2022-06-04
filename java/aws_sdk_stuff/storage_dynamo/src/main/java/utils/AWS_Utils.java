@@ -1,5 +1,6 @@
 package utils;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,6 +21,7 @@ import com.amazonaws.services.s3.model.GetObjectTaggingRequest;
 import com.amazonaws.services.s3.model.GetObjectTaggingResult;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.ObjectTagging;
+import com.amazonaws.services.s3.model.PutObjectResult;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.amazonaws.services.s3.model.SetObjectTaggingRequest;
 import com.amazonaws.services.s3.model.Tag;
@@ -44,6 +46,7 @@ public class AWS_Utils {
 	private final AmazonS3 s3client;
 	private final AmazonEC2 ec2client;
 	private final DateUtils dateUtils = new DateUtils();
+	private final String sampleText, sampleAudio;
 	
 	
 	/**
@@ -57,6 +60,8 @@ public class AWS_Utils {
 		this.ec2client = AmazonEC2ClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(credentials))
 				  .withRegion(Regions.EU_WEST_1)
 				  .build();
+		this.sampleAudio = "test_data/site_audio_acoustic.mp3";
+		this.sampleText = "test_data/todo.txt";
 	}
 
 	
@@ -148,9 +153,27 @@ public class AWS_Utils {
 	 * @param path
 	 * @param file
 	 */
-	public void putFile(String bucket, String path, String file) {
+	public Map<String, PutObjectResult> putFile(String bucket) {
+		
+		// Load file from resources
+		Map<String, PutObjectResult> output = new HashMap<>();
+		File audioFile, textFile;
+		audioFile = new File( getClass().getClassLoader().getResource(sampleAudio).getFile() );
+		textFile = new File( getClass().getClassLoader().getResource(sampleText).getFile() );
 		
 		
+		// Return null if files cannot be loaded
+		if (!audioFile.exists() | !textFile.exists()) {
+			return null;
+		}
+		
+		
+		// Push data
+		String path = "test/site_acoustic_guitar.mp3";
+		output.put("audio", s3client.putObject(bucket, path, audioFile));
+		path = "test/todo.txt";
+		output.put("text", s3client.putObject(bucket, path, textFile));
+		return output;
 	}
 	
 	

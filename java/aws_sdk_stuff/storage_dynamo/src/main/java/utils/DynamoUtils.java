@@ -34,7 +34,7 @@ public class DynamoUtils {
 	 * 
 	 */
 	private DynamoUtils() {
-		this.credentials = new BasicAWSCredentials("AKIAQIE6HOZRUGFBEJ7D", "0B7mKoVkxlNNcmCGkUO6WNile6BlImUYZSKFh8Em");
+		this.credentials = new BasicAWSCredentials("", "");
 		this.dynamoClient = AmazonDynamoDBClientBuilder.standard()
 				.withCredentials(new AWSStaticCredentialsProvider(credentials)).withRegion(Regions.EU_WEST_1).build();
 	}
