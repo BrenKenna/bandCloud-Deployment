@@ -1,9 +1,0 @@
-# All under route.kHeaders.accept
-Postman = 'PostmanRuntime/7.29.0'
-Edge: 
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36 Edg/99.0.1150.39'
-    'sec-ch-ua-platform': '"Windows"'
-cURL: 'curl/7.79.1'
-Chrome:
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36'
-    'sec-ch-ua-platform': '"Windows"'

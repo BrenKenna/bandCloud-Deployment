@@ -15,3 +15,5 @@ maven*
 *classpath
 .project
 app.zip
+plugins
+pcm_stuff
