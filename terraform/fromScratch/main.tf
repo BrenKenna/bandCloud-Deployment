@@ -1,61 +1,21 @@
 ##################################################################
 # 
-# Spinup Instance in new VPC
+# Frontend Spinup Instance in new VPC
 #   - Intentionally making use of UD & variables.tf scoped vars 
 # 
 ##################################################################
 
 # Spin up example instance from image
-resource "aws_instance" "terraFormTesting-a" {
-    # ami = aws_ami.terraform-example-1a.id
-    ami = var.ec2_vars["ami_1a"]
-    instance_type = var.ec2_vars["instanceType"]
-    subnet_id = aws_subnet.pubSub_A.id
-    key_name = var.ec2_vars["key"]
-    security_groups = [ aws_security_group.sg22.id, aws_security_group.httpAnywhere.id ]
-    iam_instance_profile  = var.ec2_vars["iamRole"]
+resource "aws_instance" "frontend-test-1a" {
+    image_id = var.app_vars.appAMIs.az1a
+    instance_type = var.app_vars.appInstanceType
+    key_name = var.app_vars.key
+    security_groups = [ aws_security_group.httpAnywhere.id ]
+    iam_instance_profile  = var.app_vars.iamRole
     associate_public_ip_address = true
+    subnet_id = aws_subnet.frontend-SubA.id
     tags = {
-        Name = "terraformApp-PubSub-A"
-    }
-
-    user_data = <<-EOF
-                #!/bin/bash
-
-                # Setup and install docker
-                sudo mkdir /workspace && cd /workspace
-                sudo yum update -y
-                sudo yum install -y docker
-                sudo service docker start
-                sudo usermod -a -G docker ec2-user
-
-                # Fetch repo
-                aws s3 cp s3://bandcloud/app/ud-conf.txt ./
-                REGION=$(grep "region" ud-conf.txt | cut -d \= -f 2)
-                REPO=$(grep "repo" ud-conf.txt | cut -d \= -f 2)
-                PORT_VALS=$(grep "port" ud-conf.txt | cut -d \= -f 2)
-                echo -e "$REGION,$REPO,$PORT_VALS" > /workspace/sanity-check.txt
-                $(aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $REPO) &>> /workspace/sanity-check.txt
-                docker pull $REPO &>> /workspace/sanity-check.txt
-
-                # Run container
-                docker run -d -p $PORT_VALS $REPO bash app/launchServer.sh $REGION &>> /workspace/webApplog.txt
-                EOF
-}
-
-
-# Zone 2
-resource "aws_instance" "terraFormTesting-b" {
-    # ami = aws_ami.terraform-example-1b.id
-    ami = var.ec2_vars["ami_1b"]
-    instance_type = var.ec2_vars["instanceType"]
-    subnet_id = aws_subnet.pubSub_B.id
-    key_name = var.ec2_vars["key"]
-    security_groups = [ aws_security_group.sg22.id, aws_security_group.httpAnywhere.id ]
-    iam_instance_profile  = var.ec2_vars["iamRole"]
-    associate_public_ip_address = true
-    tags = {
-        Name = "terraformApp-PubSub-B"
+        Name = "frontend-test-1a"
     }
 
     user_data = <<-EOF
@@ -75,5 +35,114 @@ resource "aws_instance" "terraFormTesting-b" {
 
                 # Run container
                 docker run -d -p ${var.ecr_vars["port"]} ${var.ecr_vars["repo"]} bash app/launchServer.sh ${var.ecr_vars["region"]} &>> /workspace/webApplog.txt
+                EOF
+}
+
+
+# Zone 2
+resource "aws_instance" "frontend-testing-1b" {
+    image_id = var.app_vars.appAMIs.az1a
+    instance_type = var.app_vars.appInstanceType
+    key_name = var.app_vars.key
+    security_groups = [ aws_security_group.httpAnywhere.id ]
+    iam_instance_profile  = var.app_vars.iamRole
+    associate_public_ip_address = true
+    subnet_id = aws_subnet.frontend-SubB.id
+    tags = {
+        Name = "frontend-test-1a"
+    }
+
+    user_data = <<-EOF
+                #!/bin/bash
+
+                # Setup and install docker
+                sudo mkdir /workspace && cd /workspace
+                sudo yum update -y
+                sudo yum install -y docker
+                sudo service docker start
+                sudo usermod -a -G docker ec2-user
+
+                # Fetch repo
+                echo -e "${var.ecr_vars["region"]},${var.ecr_vars["repo"]},${var.ecr_vars["port"]} " > /workspace/sanity-check.txt
+                $(aws ecr get-login-password --region ${var.ecr_vars["region"]} | docker login --username AWS --password-stdin ${var.ecr_vars["repo"]}) &>> /workspace/sanity-check.txt
+                docker pull ${var.ecr_vars["repo"]} &>> /workspace/sanity-check.txt
+
+                # Run container
+                docker run -d -p ${var.ecr_vars["port"]} ${var.ecr_vars["repo"]} bash app/launchServer.sh ${var.ecr_vars["region"]} &>> /workspace/webApplog.txt
+                EOF
+}
+
+
+
+##################################################################
+# 
+# Spinup Backend Sanity Check Servers
+# 
+##################################################################
+
+# Spin up example instance from image
+resource "aws_instance" "backend-test-1a" {
+    image_id = var.app_vars.appAMIs.az1a
+    instance_type = var.app_vars.appInstanceType
+    key_name = var.app_vars.key
+    security_groups = [ aws_security_group.httpAnywhere.id ]
+    iam_instance_profile  = var.app_vars.iamRole
+    associate_public_ip_address = true
+    subnet_id = aws_subnet.backend-SubA.id
+    tags = {
+        Name = "backend-test-1a"
+    }
+
+    user_data = <<-EOF
+                #!/bin/bash
+
+                # Setup and install docker
+                sudo mkdir /workspace && cd /workspace
+                sudo yum update -y
+                sudo yum install -y docker
+                sudo service docker start
+                sudo usermod -a -G docker ec2-user
+
+                # Fetch repo
+                echo -e "${var.app_vars.region},${var.ecr_vars["repo"]},${var.app_vars.port} " > /workspace/sanity-check.txt
+                $(aws ecr get-login-password --region ${var.ecr_vars["region"]} | docker login --username AWS --password-stdin ${var.app_vars.appRepos.frontend}) &>> /workspace/sanity-check.txt
+                docker pull ${var.ecr_vars["repo"]} &>> /workspace/sanity-check.txt
+
+                # Run container
+                docker run -d -p ${var.app_vars.port} ${var.app_vars.appRepos.backend} java -jar libs/service_testing-0.0.1.jar &>> /workspace/webApplog.txt
+                EOF
+}
+
+
+# Zone 2
+resource "aws_instance" "backend-test-1b" {
+    image_id = var.app_vars.appAMIs.az1a
+    instance_type = var.app_vars.appInstanceType
+    key_name = var.app_vars.key
+    security_groups = [ aws_security_group.httpAnywhere.id ]
+    iam_instance_profile  = var.app_vars.iamRole
+    associate_public_ip_address = true
+    subnet_id = aws_subnet.backend-SubB.id
+    tags = {
+        Name = "backend-test-1b"
+    }
+
+    user_data = <<-EOF
+                #!/bin/bash
+
+                # Setup and install docker
+                sudo mkdir /workspace && cd /workspace
+                sudo yum update -y
+                sudo yum install -y docker
+                sudo service docker start
+                sudo usermod -a -G docker ec2-user
+
+                # Fetch repo
+                echo -e "${var.app_vars.region},${var.ecr_vars["repo"]},${var.app_vars.port} " > /workspace/sanity-check.txt
+                $(aws ecr get-login-password --region ${var.ecr_vars["region"]} | docker login --username AWS --password-stdin ${var.app_vars.appRepos.frontend}) &>> /workspace/sanity-check.txt
+                docker pull ${var.ecr_vars["repo"]} &>> /workspace/sanity-check.txt
+
+                # Run container
+                docker run -d -p ${var.app_vars.port} ${var.app_vars.appRepos.backend} java -jar libs/service_testing-0.0.1.jar &>> /workspace/webApplog.txt
                 EOF
 }

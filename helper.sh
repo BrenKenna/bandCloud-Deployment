@@ -343,6 +343,7 @@ aws s3api get-object-tagging --bucket bandcloud --key test/test.txt | jq .TagSet
 sudo rpm --import https://yum.corretto.aws/corretto.key 
 sudo curl -L -o /etc/yum.repos.d/corretto.repo https://yum.corretto.aws/corretto.repo
 sudo yum install -y java-16-amazon-corretto-devel
+sudo yum update -y 
 
 
 # Check version
@@ -363,11 +364,51 @@ java -jar build/libs
 
 
 # Check endpoints
-curl -k -X GET http://XXX.XXX.XXX.XXX:8080/ec2
+curl -k -X GET http://34.247.12.14:8080/ec2
 
 '
-[{"imageId":"ami-0c1bc246476a5572b","instanceId":"i-0a9eff28b795805ad","instanceName":"tfBastion","instanceType":"t2.micro","availZone":"eu-west-1a","state":"running","hypervisor":"xen","creationDate":"2022-05-31T13:48:28.000+00:00"}
+{
+    "imageId":"ami-0c1bc246476a5572b","instanceId":"i-0a9eff28b795805ad","instanceName":"tfBastion",
+    "instanceType":"t2.micro","availZone":"eu-west-1a","state":"running",
+    "hypervisor":"xen","creationDate":"2022-05-31T13:48:28.000+00:00"
+}
 
 
 '
-curl -k -X GET http:
+
+
+################################
+#
+# Package into container
+#
+################################
+
+# Setup folder
+mkdir ~/spring-backend
+unzip app.zip
+mv build ~/spring-backend
+
+# Archive to S3
+tar -czf ~/REST_API.tar.gz build/
+aws s3 cp ~/REST_API.tar.gz s3://bandcloud/app/
+
+
+# Install & login
+rm -f ~/.docker/config.json
+sudo yum install -y amazon-linux-extras docker
+sudo service docker start
+sudo usermod -a -G docker ec2-user
+aws ecr get-login-password | docker login --username AWS --password-stdin 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-backend
+
+
+# Clear space
+docker container prune -f && docker image prune -f
+
+# Build & push
+docker build --no-cache -t bandcloud-backend .
+docker tag bandcloud-backend:latest 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-backend:latest
+docker push 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-backend:latest
+
+
+# Sanity check
+docker run -it -p 8080:8080 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-backend
