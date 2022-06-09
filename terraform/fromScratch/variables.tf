@@ -16,7 +16,7 @@ variable "bandCloud-network" {
           "backend": "10.2.2.0/24"
       }
       az2_subnets = {
-          "availZone": "eu-west-1ab",
+          "availZone": "eu-west-1b",
           "frontend": "10.2.3.0/24",
           "backend": "10.2.4.0/24"
       }
@@ -52,7 +52,7 @@ variable "app_vars" {
       }
       appAMIs = {
           "az1a" = "ami-05be68f5425399abd",
-          "az1b" = ami_1b = "ami-09aba1ee0015fc959"
+          "az1b" = "ami-09aba1ee0015fc959"
       }
     }
 }
