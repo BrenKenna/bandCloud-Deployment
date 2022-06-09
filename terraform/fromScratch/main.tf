@@ -7,13 +7,14 @@
 
 # Spin up example instance from image
 resource "aws_instance" "frontend-test-1a" {
-    image_id = var.app_vars.appAMIs.az1a
+    ami = var.app_vars.appAMIs.az1a
     instance_type = var.app_vars.appInstanceType
-    key_name = var.app_vars.key
+    key_name = var.app_vars.appKey
     security_groups = [ aws_security_group.httpAnywhere.id ]
     iam_instance_profile  = var.app_vars.iamRole
     associate_public_ip_address = true
     subnet_id = aws_subnet.frontend-SubA.id
+    
     tags = {
         Name = "frontend-test-1a"
     }
@@ -41,9 +42,9 @@ resource "aws_instance" "frontend-test-1a" {
 
 # Zone 2
 resource "aws_instance" "frontend-testing-1b" {
-    image_id = var.app_vars.appAMIs.az1a
+    ami = var.app_vars.appAMIs.az1a
     instance_type = var.app_vars.appInstanceType
-    key_name = var.app_vars.key
+    key_name = var.app_vars.appKey
     security_groups = [ aws_security_group.httpAnywhere.id ]
     iam_instance_profile  = var.app_vars.iamRole
     associate_public_ip_address = true
@@ -82,9 +83,9 @@ resource "aws_instance" "frontend-testing-1b" {
 
 # Spin up example instance from image
 resource "aws_instance" "backend-test-1a" {
-    image_id = var.app_vars.appAMIs.az1a
+    ami = var.app_vars.appAMIs.az1a
     instance_type = var.app_vars.appInstanceType
-    key_name = var.app_vars.key
+    key_name = var.app_vars.appKey
     security_groups = [ aws_security_group.httpAnywhere.id ]
     iam_instance_profile  = var.app_vars.iamRole
     associate_public_ip_address = true
@@ -116,9 +117,9 @@ resource "aws_instance" "backend-test-1a" {
 
 # Zone 2
 resource "aws_instance" "backend-test-1b" {
-    image_id = var.app_vars.appAMIs.az1a
+    ami = var.app_vars.appAMIs.az1a
     instance_type = var.app_vars.appInstanceType
-    key_name = var.app_vars.key
+    key_name = var.app_vars.appKey
     security_groups = [ aws_security_group.httpAnywhere.id ]
     iam_instance_profile  = var.app_vars.iamRole
     associate_public_ip_address = true

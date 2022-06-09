@@ -289,7 +289,7 @@ ssh -i bandCloud.pem ec2-user@ec2-34-247-12-14.eu-west-1.compute.amazonaws.com
 
 
 # ELB
-ELB_DNS=$(aws elbv2 describe-load-balancers --names "tf-app-elb" | jq .LoadBalancers[0].DNSName | sed 's/"//g')
+ELB_DNS=$(aws elbv2 describe-load-balancers --names "fe-app-elb" | jq .LoadBalancers[0].DNSName | sed 's/"//g')
 cd app
 for toEdit in $(find . -name "index.html" | cut -d \/ -f 2-)
     do

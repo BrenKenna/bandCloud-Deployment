@@ -5,8 +5,18 @@ variable "bandCloud-network" {
         vpcName = string
         cidrBlock = string
         region = string
-        az1_subnets = object(string)
-        az2_subnets = object(string)
+
+        az1_subnets = object({
+            availZone = string 
+            frontend = string
+            backend = string
+        })
+
+        az2_subnets = object({
+            availZone = string 
+            frontend = string
+            backend = string
+        })
     })
 
     default = {
@@ -33,11 +43,17 @@ variable "app_vars" {
     type = object({
         iamRole = string
         appInstanceType = string
-        key = string
+        appKey = string
         region = string
         port = string
-        appAMIs = object(string)
-        appRepos = object(string)
+        appAMIs = object({
+            az1a = string
+            az1b = string
+        })
+        appRepos = object({
+            frontend = string
+            backend = string
+        })
     })
 
     default = {

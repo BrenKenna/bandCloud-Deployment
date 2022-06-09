@@ -25,8 +25,8 @@ resource "aws_vpc" "bandCloud-VPC" {
 # Configure frontend subnet
 resource "aws_subnet" "frontend-SubA" {
     vpc_id = aws_vpc.bandCloud-VPC.id
-    cidr_block = var.bandcloud-network.az1_subnets.frontend
-    availability_zone = var.bandcloud-network.az1_subnets.availZone
+    cidr_block = var.bandCloud-network.az1_subnets.frontend
+    availability_zone = var.bandCloud-network.az1_subnets.availZone
     map_public_ip_on_launch = true
     tags = {
         Name = "frontend-SubA"
@@ -38,8 +38,8 @@ resource "aws_subnet" "frontend-SubA" {
 # Configure backend subnet
 resource "aws_subnet" "backend-SubA" {
     vpc_id = aws_vpc.bandCloud-VPC.id
-    cidr_block = var.bandcloud-network.az1_subnets.backend
-    availability_zone = var.bandcloud-network.az1_subnets.availZone
+    cidr_block = var.bandCloud-network.az1_subnets.backend
+    availability_zone = var.bandCloud-network.az1_subnets.availZone
     map_public_ip_on_launch = true
     tags = {
         Name = "backend-SubA"
@@ -57,8 +57,8 @@ resource "aws_subnet" "backend-SubA" {
 # Configure frontend subnet
 resource "aws_subnet" "frontend-SubB" {
     vpc_id = aws_vpc.bandCloud-VPC.id
-    cidr_block = var.bandcloud-network.az2_subnets.frontend
-    availability_zone = var.bandcloud-network.az2_subnets.availZone
+    cidr_block = var.bandCloud-network.az2_subnets.frontend
+    availability_zone = var.bandCloud-network.az2_subnets.availZone
     map_public_ip_on_launch = true
     tags = {
         Name = "frontend-SubB"
@@ -70,8 +70,8 @@ resource "aws_subnet" "frontend-SubB" {
 # Configure backend subnet
 resource "aws_subnet" "backend-SubB" {
     vpc_id = aws_vpc.bandCloud-VPC.id
-    cidr_block = var.bandcloud-network.az2_subnets.backend
-    availability_zone = var.bandcloud-network.az2_subnets.availZone
+    cidr_block = var.bandCloud-network.az2_subnets.backend
+    availability_zone = var.bandCloud-network.az2_subnets.availZone
     map_public_ip_on_launch = true
     tags = {
         Name = "backend-SubBs"
