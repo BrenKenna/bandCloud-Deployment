@@ -403,6 +403,7 @@ sudo usermod -a -G docker ec2-user
 # Clear space
 docker container prune -f && docker image prune -f
 
+
 # Build & push
 aws ecr get-login-password | docker login --username AWS --password-stdin 017511708259.dkr.ecr.eu-west-1.amazonaws.com/spring-backend:latest
 docker build --no-cache -t spring-backend .

@@ -24,16 +24,12 @@ resource "aws_launch_configuration" "frontend-LC-1a" {
                 sudo usermod -a -G docker ec2-user
 
                 # Fetch repo
-                aws s3 cp s3://bandcloud/app/ud-conf.txt ./
-                REGION=$(grep "region" ud-conf.txt | cut -d \= -f 2)
-                REPO=$(grep "repo" ud-conf.txt | cut -d \= -f 2)
-                PORT_VALS=$(grep "port" ud-conf.txt | cut -d \= -f 2)
-                echo -e "$REGION,$REPO,$PORT_VALS" > /workspace/sanity-check.txt
-                $(aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $REPO) &>> /workspace/sanity-check.txt
-                docker pull $REPO &>> /workspace/sanity-check.txt
+                echo -e "${var.app_vars.region},${var.app_vars.appRepos.frontend},${var.app_vars.port} " > /workspace/sanity-check.txt
+                $(aws ecr get-login-password --region ${var.app_vars.region} | docker login --username AWS --password-stdin ${var.app_vars.appRepos.frontend}) &>> /workspace/sanity-check.txt
+                docker pull ${var.app_vars.appRepos.frontend} &>> /workspace/sanity-check.txt
 
                 # Run container
-                docker run -d -p $PORT_VALS $REPO bash app/launchServer.sh $REGION &>> /workspace/webApplog.txt
+                docker run -d -p ${var.app_vars.port} ${var.app_vars.appRepos.frontend} bash launchServer.sh ${var.app_vars.region} &>> /workspace/webApplog.txt
                 EOF
 }
 
@@ -63,12 +59,12 @@ resource "aws_launch_configuration" "frontend-LC-1b" {
                 sudo usermod -a -G docker ec2-user
 
                 # Fetch repo
-                echo -e "${var.ecr_vars["region"]},${var.ecr_vars["repo"]},${var.ecr_vars["port"]} " > /workspace/sanity-check.txt
-                $(aws ecr get-login-password --region ${var.ecr_vars["region"]} | docker login --username AWS --password-stdin ${var.ecr_vars["repo"]}) &>> /workspace/sanity-check.txt
-                docker pull ${var.ecr_vars["repo"]} &>> /workspace/sanity-check.txt
+                echo -e "${var.app_vars.region},${var.app_vars.appRepos.frontend},${var.app_vars.port} " > /workspace/sanity-check.txt
+                $(aws ecr get-login-password --region ${var.app_vars.region} | docker login --username AWS --password-stdin ${var.app_vars.appRepos.frontend}) &>> /workspace/sanity-check.txt
+                docker pull ${var.app_vars.appRepos.frontend} &>> /workspace/sanity-check.txt
 
                 # Run container
-                docker run -d -p ${var.ecr_vars["port"]} ${var.ecr_vars["repo"]} bash app/launchServer.sh ${var.ecr_vars["region"]} &>> /workspace/webApplog.txt
+                docker run -d -p ${var.app_vars.port} ${var.app_vars.appRepos.frontend} bash launchServer.sh ${var.app_vars.region} &>> /workspace/webApplog.txt
                 EOF
 }
 

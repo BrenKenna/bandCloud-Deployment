@@ -4,7 +4,6 @@ certs/*
 node_modules
 app/node_modules
 .git
-*sh
 tfWebApp.tar.gz
 *zip
 *jar
