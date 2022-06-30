@@ -500,3 +500,7 @@ aws ecr get-login-password | docker login --username AWS --password-stdin 017511
 docker build --no-cache -t bandcloud-frontend .
 docker tag bandcloud-frontend:latest 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend:latest
 docker push 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend:latest
+
+
+# Test run
+docker run -it -p 8080:8080 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend

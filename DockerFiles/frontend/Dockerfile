@@ -9,7 +9,7 @@ RUN yum update -y \
 # Install node
 RUN curl -sL https://rpm.nodesource.com/setup_14.x | bash - \
     && yum install -y nodejs \
-    && npm i -g aws-sdk express
+    && npm i -g express axios
 
 # Install app
 RUN aws s3 cp s3://bandcloud/app/bandCloud-Angular.tar.gz ./ \
