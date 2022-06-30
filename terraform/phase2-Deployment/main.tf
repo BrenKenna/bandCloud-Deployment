@@ -1,9 +1,13 @@
-##################################################################
+############################################################################################
 # 
 # Frontend Spinup Instance in new VPC
 #   - Intentionally making use of UD & variables.tf scoped vars 
+#   - The purpose of these servers is to be able to sanity check deployment issues
+#       - Port 22 is intentionally exposed for this reason
+#       - There is one per AZ as a "just in case" for unseen issues.
+#           => Doubtless there are services to help here, but that stuff comes laterzz :)
 # 
-##################################################################
+#############################################################################################
 
 # Spin up example instance from image
 resource "aws_instance" "frontend-test-1a" {
