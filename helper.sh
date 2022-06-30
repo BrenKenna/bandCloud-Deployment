@@ -412,3 +412,64 @@ docker push 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-backend:lates
 
 # Sanity check
 docker run -it -p 8080:8080 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-backend
+
+
+
+##########################################################
+##########################################################
+# 
+# Push Test Project Data to S3
+# 
+##########################################################
+##########################################################
+
+
+# Login and push data
+ssh -i bandCloud.pem ec2-user@ec2-34-247-12-14.eu-west-1.compute.amazonaws.com
+aws s3 presign s3://bandcloud/test/test.txt --expires 60
+
+
+# Push test data
+tag='{"TagSet":[{ "Key": "owner", "Value": "test" }, {"Key": "lastEditor", "Value": "test"}]}'
+for i in {1..3}
+    do
+    for j in {1..3}
+        do
+        seq $(($RANDOM % 20)) > ${j}-raw.txt
+        aws s3 cp ${j}-raw.txt s3://bandcloud/data/test/project${i}/raw_audio/${j}-raw.txt
+        aws s3api put-object-tagging --bucket bandcloud --key data/test/project${i}/raw_audio/${j}-raw.txt --tagging '{"TagSet":[{ "Key": "owner", "Value": "test" }, {"Key": "lastEditor", "Value": "test"}]}'
+    done
+    seq $(($RANDOM % 20)) > ${i}-mixed.txt
+    aws s3 cp ${i}-mixed.txt s3://bandcloud/data/test/project${i}/${i}-mixed.txt
+    aws s3api put-object-tagging --bucket bandcloud --key data/test/project${i}/${i}-mixed.txt --tagging '{"TagSet":[{ "Key": "owner", "Value": "test" }, {"Key": "lastEditor", "Value": "test"}]}'
+done
+
+
+# Tag an s3 file
+i=1
+tag=
+aws s3api put-object-tagging --bucket bandcloud --key data/test/project${i}/${i}-mixed.txt --tagging 
+
+'{"TagSet": [{ "Key": "Creator", "Value": "Me" }]}'
+
+
+
+######################################
+######################################
+# 
+# Deploy Angular App
+# 
+######################################
+######################################
+
+
+# Copy project
+scp -i bandCloud.pem bandCloud-Angular.tar.gz ec2-user@ec2-34-247-12-14.eu-west-1.compute.amazonaws.com:~/bandCloud-Angular/
+
+
+# Login
+ssh -i bandCloud.pem ec2-user@ec2-34-247-12-14.eu-west-1.compute.amazonaws.com
+
+
+# Install packages required to run: Node
+sudo npm install -g @angular/cli
