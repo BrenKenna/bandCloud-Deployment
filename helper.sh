@@ -244,7 +244,7 @@ aws ecr get-login-password | docker login --username AWS --password-stdin 017511
 
 # Build & push
 cd ~/bandCloud-App
-docker build --no-cache -t bandcloud .
+docker build --no-cache -t bandcloudFrontEd .
 docker tag bandcloud:latest 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud:latest
 docker push 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud:latest
 
@@ -464,12 +464,39 @@ aws s3api put-object-tagging --bucket bandcloud --key data/test/project${i}/${i}
 
 
 # Copy project
-scp -i bandCloud.pem bandCloud-Angular.tar.gz ec2-user@ec2-34-247-12-14.eu-west-1.compute.amazonaws.com:~/bandCloud-Angular/
+scp -i bandCloud.pem bandCloud-Angular.tar.gz ec2-user@ec2-34-254-90-83.eu-west-1.compute.amazonaws.com:~/bandCloud-Angular/
 
 
 # Login
-ssh -i bandCloud.pem ec2-user@ec2-34-247-12-14.eu-west-1.compute.amazonaws.com
+ssh -i bandCloud.pem ec2-user@ec2-34-254-90-83.eu-west-1.compute.amazonaws.com
 
 
 # Install packages required to run: Node
 sudo npm install -g @angular/cli
+
+
+
+#
+# Add in the launchServer.sh
+#   => Want docker container to all files from projects root folder
+#   => Work space dir is this folder
+#
+tar -xf bandCloud-Angular.tar.gz
+rm -f bandCloud-Angular.tar.gz
+tar -czf bandCloud-Angular.tar.gz ionic-file-explorer/
+aws s3 cp bandCloud-Angular.tar.gz s3://bandcloud/app/
+
+
+#####################
+# 
+# Build Container
+# 
+#####################
+
+
+# Build & push
+cd ~/bandCloud-Angular
+aws ecr get-login-password | docker login --username AWS --password-stdin 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend
+docker build --no-cache -t bandcloud-frontend .
+docker tag bandcloud-frontend:latest 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend:latest
+docker push 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend:latest
