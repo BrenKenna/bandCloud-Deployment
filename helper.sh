@@ -476,7 +476,6 @@ ssh -i bandCloud.pem ec2-user@ec2-34-254-90-83.eu-west-1.compute.amazonaws.com
 sudo npm install -g @angular/cli
 
 
-
 #
 # Add in the launchServer.sh
 #   => Want docker container to all files from projects root folder
@@ -488,20 +487,34 @@ tar -czf bandCloud-Angular.tar.gz ionic-file-explorer/
 aws s3 cp bandCloud-Angular.tar.gz s3://bandcloud/app/
 
 
-#####################
-# 
-# Build Container
-# 
-#####################
-
-
 # Build & push
 cd ~/bandCloud-Angular
 aws ecr get-login-password | docker login --username AWS --password-stdin 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend
 docker build --no-cache -t bandcloud-frontend .
+
+
+# Sanity check
+docker run -it -p 8080:8080 bandcloud-frontend bash launchServer.sh eu-west-1
+
+
+# Push if good
 docker tag bandcloud-frontend 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend:latest
 docker push 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend:latest
 
 
 # Test run
-docker run -it -p 8080:8080 bandcloud-frontend
+docker pull 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend
+docker run -it -p 8080:8080 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend bash launchServer.sh eu-west-1
+
+"""
+
+- Definately works fine, reckon it is just a timing issue for 502-Bad Gatewat. Frontend container is big etc
+
+An error occurred (LoadBalancerNotFound) when calling the DescribeLoadBalancers operation: Load balancers '[be-app-elb]' not found
+
+Error, unable to find BE-DNS running as is for debugging
+BandCloud listening on port = 8080, address = 0.0.0.0
+Backend API = http://TEMPLATE_ELB_DNS:8080
+Current directory: /workspace/ionic-file-explorer/file-explorer/dist/file-explorer/
+
+"""

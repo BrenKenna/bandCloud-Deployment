@@ -15,6 +15,6 @@ RUN curl -sL https://rpm.nodesource.com/setup_14.x | bash - \
 RUN aws s3 cp s3://bandcloud/app/bandCloud-Angular.tar.gz ./ \
     && tar -xf bandCloud-Angular.tar.gz
 
-# Run app
+# Update start-up working directory
 WORKDIR /workspace/ionic-file-explorer
-RUN ls
+# RUN ls
