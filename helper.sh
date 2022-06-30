@@ -207,7 +207,7 @@ export AWS_SECRET_ACCESS_KEY=$(grep "secret" ~/.aws/credentials | cut -d \= -f 2
 
 # Initalize and inspect
 terraform init
-teraform plan # Output here quite useful to check TF related vars etc
+terraform plan # Output here quite useful to check TF related vars etc
 
 # Create/update infrastructure
 terraform apply
@@ -398,16 +398,16 @@ rm -f ~/.docker/config.json
 sudo yum install -y amazon-linux-extras docker
 sudo service docker start
 sudo usermod -a -G docker ec2-user
-aws ecr get-login-password | docker login --username AWS --password-stdin 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-backend
 
 
 # Clear space
 docker container prune -f && docker image prune -f
 
 # Build & push
-docker build --no-cache -t bandcloud-backend .
-docker tag bandcloud-backend:latest 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-backend:latest
-docker push 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-backend:latest
+aws ecr get-login-password | docker login --username AWS --password-stdin 017511708259.dkr.ecr.eu-west-1.amazonaws.com/spring-backend:latest
+docker build --no-cache -t spring-backend .
+docker tag spring-backend:latest 017511708259.dkr.ecr.eu-west-1.amazonaws.com/spring-backend:latest
+docker push 017511708259.dkr.ecr.eu-west-1.amazonaws.com/spring-backend:lastest
 
 
 # Sanity check
@@ -498,9 +498,9 @@ aws s3 cp bandCloud-Angular.tar.gz s3://bandcloud/app/
 cd ~/bandCloud-Angular
 aws ecr get-login-password | docker login --username AWS --password-stdin 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend
 docker build --no-cache -t bandcloud-frontend .
-docker tag bandcloud-frontend:latest 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend:latest
+docker tag bandcloud-frontend 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend:latest
 docker push 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend:latest
 
 
 # Test run
-docker run -it -p 8080:8080 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend
+docker run -it -p 8080:8080 bandcloud-frontend

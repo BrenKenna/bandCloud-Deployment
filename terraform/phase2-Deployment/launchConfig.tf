@@ -101,8 +101,8 @@ resource "aws_launch_configuration" "backend-LC-1a" {
 
                 # Fetch repo
                 echo -e "${var.app_vars.region},${var.ecr_vars["repo"]},${var.app_vars.port} " > /workspace/sanity-check.txt
-                $(aws ecr get-login-password --region ${var.ecr_vars["region"]} | docker login --username AWS --password-stdin ${var.app_vars.appRepos.frontend}) &>> /workspace/sanity-check.txt
-                docker pull ${var.ecr_vars["repo"]} &>> /workspace/sanity-check.txt
+                $(aws ecr get-login-password --region ${var.ecr_vars["region"]} | docker login --username AWS --password-stdin ${var.app_vars.appRepos.backend}) &>> /workspace/sanity-check.txt
+                docker pull ${var.app_vars.appRepos.backend} &>> /workspace/sanity-check.txt
 
                 # Run container
                 docker run -d -p ${var.app_vars.port} ${var.app_vars.appRepos.backend} java -jar libs/service_testing-0.0.1.jar &>> /workspace/webApplog.txt
@@ -136,8 +136,8 @@ resource "aws_launch_configuration" "backend-LC-1b" {
 
                 # Fetch repo
                 echo -e "${var.app_vars.region},${var.ecr_vars["repo"]},${var.app_vars.port} " > /workspace/sanity-check.txt
-                $(aws ecr get-login-password --region ${var.ecr_vars["region"]} | docker login --username AWS --password-stdin ${var.app_vars.appRepos.frontend}) &>> /workspace/sanity-check.txt
-                docker pull ${var.ecr_vars["repo"]} &>> /workspace/sanity-check.txt
+                $(aws ecr get-login-password --region ${var.ecr_vars["region"]} | docker login --username AWS --password-stdin ${var.app_vars.appRepos.backend}) &>> /workspace/sanity-check.txt
+                docker pull ${var.app_vars.appRepos.backend} &>> /workspace/sanity-check.txt
 
                 # Run container
                 docker run -d -p ${var.app_vars.port} ${var.app_vars.appRepos.backend} java -jar libs/service_testing-0.0.1.jar &>> /workspace/webApplog.txt

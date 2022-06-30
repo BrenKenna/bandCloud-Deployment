@@ -63,8 +63,10 @@ variable "app_vars" {
       region = "eu-west-1"
       port = "8080:8080"
       appRepos = {
-          "frontend": "017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud",
-          "backend": "017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-backend"
+          "loginApp": "017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud",
+          "springApp": "017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-backend",
+          "backend": "017511708259.dkr.ecr.eu-west-1.amazonaws.com/spring-backend",
+          "frontend": "017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend"
       }
       appAMIs = {
           "az1a" = "ami-05be68f5425399abd",

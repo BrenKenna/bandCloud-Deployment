@@ -13,8 +13,8 @@ RUN rpm --import https://yum.corretto.aws/corretto.key \
     && yum update -y 
 
 # Install app
-RUN aws s3 cp s3://bandcloud/app/REST_API.tar.gz ./ \
-    && tar -xf REST_API.tar.gz
+RUN aws s3 cp s3://bandcloud/app/Spring-REST-API.tar.gz ./ \
+    && tar -xf Spring-REST-API.tar.gz
 
 # Run app
 WORKDIR /workspace/build
