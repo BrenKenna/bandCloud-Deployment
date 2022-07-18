@@ -31,7 +31,7 @@ resource "aws_network_acl" "fe-admin-nacl" {
 }
 
 # Allow in/outbound ssh
-resource "aws_network_acl_rule" "inbound_ssh" {
+resource "aws_network_acl_rule" "inbound_ssh-fe-admin" {
     network_acl_id = aws_network_acl.fe-admin-nacl.id
     rule_number = 100
     egress = false
@@ -41,7 +41,7 @@ resource "aws_network_acl_rule" "inbound_ssh" {
     from_port = 22
     to_port = 22
 }
-resource "aws_network_acl_rule" "outbound_ssh" {
+resource "aws_network_acl_rule" "outbound_ssh-fe-admin" {
     network_acl_id = aws_network_acl.fe-admin-nacl.id
     rule_number = 100
     egress = true
@@ -53,7 +53,7 @@ resource "aws_network_acl_rule" "outbound_ssh" {
 }
 
 # Allow http-8080
-resource "aws_network_acl_rule" "inbound_http" {
+resource "aws_network_acl_rule" "inbound_http-fe-admin" {
     network_acl_id = aws_network_acl.fe-admin-nacl.id
     rule_number = 110
     egress = false
@@ -63,7 +63,7 @@ resource "aws_network_acl_rule" "inbound_http" {
     from_port = 8080
     to_port = 8080
 }
-resource "aws_network_acl_rule" "outbound_http" {
+resource "aws_network_acl_rule" "outbound_http-fe-admin" {
     network_acl_id = aws_network_acl.fe-admin-nacl.id
     rule_number = 110
     egress = true
@@ -76,7 +76,7 @@ resource "aws_network_acl_rule" "outbound_http" {
 
 
 # Allow ping
-resource "aws_network_acl_rule" "inbound_ping" {
+resource "aws_network_acl_rule" "inbound_ping-fe-admin" {
     network_acl_id = aws_network_acl.fe-admin-nacl.id
     rule_number = 120
     egress = false
@@ -88,7 +88,7 @@ resource "aws_network_acl_rule" "inbound_ping" {
     icmp_type = -1
     icmp_code = -1
 }
-resource "aws_network_acl_rule" "outbound_ping" {
+resource "aws_network_acl_rule" "outbound_ping-fe-admin" {
     network_acl_id = aws_network_acl.fe-admin-nacl.id
     rule_number = 120
     egress = true
@@ -119,71 +119,71 @@ resource "aws_network_acl" "be-admin-nacl" {
 }
 
 # Allow in/outbound ssh
-resource "aws_network_acl_rule" "inbound_ssh" {
+resource "aws_network_acl_rule" "inbound_ssh-be-admin" {
     network_acl_id = aws_network_acl.be-admin-nacl.id
     rule_number = 100
     egress = false
     protocol = "tcp"
     rule_action = "allow"
-    cidr_block = "${vars.bandCloud-network.cidrBlock}"
+    cidr_block = "${var.bandCloud-network.cidrBlock}"
     from_port = 22
     to_port = 22
 }
-resource "aws_network_acl_rule" "outbound_ssh" {
+resource "aws_network_acl_rule" "outbound_ssh-be-admin" {
     network_acl_id = aws_network_acl.be-admin-nacl.id
     rule_number = 100
     egress = true
     protocol = "tcp"
     rule_action = "allow"
-    cidr_block = "${vars.bandCloud-network.cidrBlock}"
+    cidr_block = "${var.bandCloud-network.cidrBlock}"
     from_port = 22
     to_port = 22
 }
 
 
 # Allow http-8080-Dev
-resource "aws_network_acl_rule" "inbound_http" {
+resource "aws_network_acl_rule" "inbound_http-be-admin" {
     network_acl_id = aws_network_acl.be-admin-nacl.id
     rule_number = 110
     egress = false
     protocol = "tcp"
     rule_action = "allow"
-    cidr_block = "${vars.bandCloud-network.cidrBlock}"
+    cidr_block = "${var.bandCloud-network.cidrBlock}"
     from_port = 8080
     to_port = 8080
 }
-resource "aws_network_acl_rule" "outbound_http" {
+resource "aws_network_acl_rule" "outbound_http-be-admin" {
     network_acl_id = aws_network_acl.be-admin-nacl.id
     rule_number = 110
     egress = true
     protocol = "tcp"
     rule_action = "allow"
-    cidr_block = "${vars.bandCloud-network.cidrBlock}"
+    cidr_block = "${var.bandCloud-network.cidrBlock}"
     from_port = 8080
     to_port = 8080
 }
 
 
 # Allow ping
-resource "aws_network_acl_rule" "inbound_ping" {
+resource "aws_network_acl_rule" "inbound_ping-be-admin" {
     network_acl_id = aws_network_acl.be-admin-nacl.id
     rule_number = 120
     egress = false
     protocol = "icmp"
     rule_action = "allow"
-    cidr_block = "${vars.bandCloud-network.cidrBlock}"
+    cidr_block = "${var.bandCloud-network.cidrBlock}"
     from_port = -1
     to_port = -1
     icmp_type = -1
     icmp_code = -1
 }
-resource "aws_network_acl_rule" "outbound_ping" {
+resource "aws_network_acl_rule" "outbound_ping-be-admin" {
     network_acl_id = aws_network_acl.be-admin-nacl.id
     rule_number = 120
     egress = true
     protocol = "icmp"
     rule_action = "allow"
-    cidr_block = "${vars.bandCloud-network.cidrBlock}"
+    cidr_block = "${var.bandCloud-network.cidrBlock}"
     from_port = -1
     to_port = -1
     icmp_type = -1
@@ -192,7 +192,7 @@ resource "aws_network_acl_rule" "outbound_ping" {
 
 
 # Outbound https
-resource "aws_network_acl_rule" "outbound_https" {
+resource "aws_network_acl_rule" "outbound_https-be-admin" {
     network_acl_id = aws_network_acl.be-admin-nacl.id
     rule_number = 130
     egress = true
@@ -229,7 +229,7 @@ resource "aws_network_acl" "fe-app-nacl" {
 
 
 # Allow http-8080
-resource "aws_network_acl_rule" "inbound_http" {
+resource "aws_network_acl_rule" "inbound_http-fe-app" {
     network_acl_id = aws_network_acl.fe-app-nacl.id
     rule_number = 100
     egress = false
@@ -239,7 +239,7 @@ resource "aws_network_acl_rule" "inbound_http" {
     from_port = 8080
     to_port = 8080
 }
-resource "aws_network_acl_rule" "outbound_http" {
+resource "aws_network_acl_rule" "outbound_http-fe-app" {
     network_acl_id = aws_network_acl.fe-app-nacl.id
     rule_number = 100
     egress = true
@@ -252,7 +252,7 @@ resource "aws_network_acl_rule" "outbound_http" {
 
 
 # Allow ping
-resource "aws_network_acl_rule" "inbound_ping" {
+resource "aws_network_acl_rule" "inbound_ping-fe-app" {
     network_acl_id = aws_network_acl.fe-app-nacl.id
     rule_number = 110
     egress = false
@@ -264,7 +264,7 @@ resource "aws_network_acl_rule" "inbound_ping" {
     icmp_type = -1
     icmp_code = -1
 }
-resource "aws_network_acl_rule" "outbound_ping" {
+resource "aws_network_acl_rule" "outbound_ping-fe-app" {
     network_acl_id = aws_network_acl.fe-app-nacl.id
     rule_number = 120
     egress = true
@@ -296,48 +296,48 @@ resource "aws_network_acl" "be-app-nacl" {
 
 
 # Allow http-8080
-resource "aws_network_acl_rule" "inbound_http" {
+resource "aws_network_acl_rule" "inbound_http-be-app" {
     network_acl_id = aws_network_acl.be-app-nacl.id
     rule_number = 100
     egress = false
     protocol = "tcp"
     rule_action = "allow"
-    cidr_block = "${vars.bandCloud-network.cidrBlock}"
+    cidr_block = "${var.bandCloud-network.cidrBlock}"
     from_port = 8080
     to_port = 8080
 }
-resource "aws_network_acl_rule" "outbound_http" {
+resource "aws_network_acl_rule" "outbound_http-be-app" {
     network_acl_id = aws_network_acl.be-app-nacl.id
     rule_number = 100
     egress = true
     protocol = "tcp"
     rule_action = "allow"
-    cidr_block = "${vars.bandCloud-network.cidrBlock}"
+    cidr_block = "${var.bandCloud-network.cidrBlock}"
     from_port = 8080
     to_port = 8080
 }
 
 
 # Allow ping
-resource "aws_network_acl_rule" "inbound_ping" {
+resource "aws_network_acl_rule" "inbound_ping-be-app" {
     network_acl_id = aws_network_acl.be-app-nacl.id
     rule_number = 110
     egress = false
     protocol = "icmp"
     rule_action = "allow"
-    cidr_block = "${vars.bandCloud-network.cidrBlock}"
+    cidr_block = "${var.bandCloud-network.cidrBlock}"
     from_port = -1
     to_port = -1
     icmp_type = -1
     icmp_code = -1
 }
-resource "aws_network_acl_rule" "outbound_ping" {
+resource "aws_network_acl_rule" "outbound_ping-be-app" {
     network_acl_id = aws_network_acl.be-app-nacl.id
     rule_number = 110
     egress = true
     protocol = "icmp"
     rule_action = "allow"
-    cidr_block = "${vars.bandCloud-network.cidrBlock}"
+    cidr_block = "${var.bandCloud-network.cidrBlock}"
     from_port = -1
     to_port = -1
     icmp_type = -1
@@ -346,7 +346,7 @@ resource "aws_network_acl_rule" "outbound_ping" {
 
 
 # Allow https out
-resource "aws_network_acl_rule" "outbound_https" {
+resource "aws_network_acl_rule" "outbound_https-be-app" {
     network_acl_id = aws_network_acl.be-app-nacl.id
     rule_number = 120
     egress = true

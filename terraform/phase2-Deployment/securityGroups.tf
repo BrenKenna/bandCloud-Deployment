@@ -18,65 +18,65 @@ resource "aws_security_group" "fe-admin-sg" {
 
 
 # In/Outbound HTTP-Dev
-resource "aws_security_group_rule" "httpAnywhere" {
+resource "aws_security_group_rule" "httpAnywhere-in-fe-admin" {
     type = "ingress"
     from_port = 8080
     to_port = 8080
     protocol = "tcp"
     cidr_blocks = [ "0.0.0.0/0" ]
     security_group_id = aws_security_group.fe-admin-sg.id
-    description = "http-anywhere"
+    description = "http-anywhere-in"
 }
-resource "aws_security_group_rule" "httpAnywhere" {
+resource "aws_security_group_rule" "httpAnywhere-out-fe-admin" {
     type = "egress"
     from_port = 8080
     to_port = 8080
     protocol = "tcp"
     cidr_blocks = [ "0.0.0.0/0" ]
     security_group_id = aws_security_group.fe-admin-sg.id
-    description = "http-anywhere"
+    description = "http-anywhere-out"
 }
 
 
 # Permit ssh traffic
-resource "aws_security_group_rule" "ssh-Anywhere" {
-    type = "egress"
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    cidr_blocks = [ "0.0.0.0/0" ]
-    security_group_id = aws_security_group.fe-admin-sg.id
-    description = "http-anywhere"
-}
-resource "aws_security_group_rule" "ssh-Anywhere" {
+resource "aws_security_group_rule" "ssh-Anywhere-in-fe-admin" {
     type = "ingress"
     from_port = 22
     to_port = 22
     protocol = "tcp"
     cidr_blocks = [ "0.0.0.0/0" ]
     security_group_id = aws_security_group.fe-admin-sg.id
-    description = "http-anywhere"
+    description = "ssh-anywhere-in"
+}
+resource "aws_security_group_rule" "ssh-Anywhere-out-fe-admin" {
+    type = "egress"
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    cidr_blocks = [ "0.0.0.0/0" ]
+    security_group_id = aws_security_group.fe-admin-sg.id
+    description = "ssh-anywhere-out"
 }
 
 
 # ICMP
-resource "aws_security_group_rule" "ping-Anywhere" {
+resource "aws_security_group_rule" "ping-Anywhere-in-fe-admin" {
     type = "ingress"
     from_port = -1
     to_port = -1
     protocol = "icmp"
     cidr_blocks = [ "0.0.0.0/0" ]
     security_group_id = aws_security_group.fe-admin-sg.id
-    description = "ping-anywhere"
+    description = "ping-anywhere-in"
 }
-resource "aws_security_group_rule" "ping-Anywhere" {
+resource "aws_security_group_rule" "ping-Anywhere-out-fe-admin" {
     type = "egress"
     from_port = -1
     to_port = -1
     protocol = "icmp"
     cidr_blocks = [ "0.0.0.0/0" ]
     security_group_id = aws_security_group.fe-admin-sg.id
-    description = "ping-anywhere"
+    description = "ping-anywhere-out"
 }
 
 
@@ -95,28 +95,28 @@ resource "aws_security_group" "fe-app-sg" {
 
 
 # In/Outbound HTTP-Dev
-resource "aws_security_group_rule" "httpAnywhere" {
+resource "aws_security_group_rule" "app-httpAnywhere-in-fe" {
     type = "ingress"
     from_port = 8080
     to_port = 8080
     protocol = "tcp"
     cidr_blocks = [ "0.0.0.0/0" ]
     security_group_id = aws_security_group.fe-app-sg.id
-    description = "http-anywhere"
+    description = "http-anywhere-in"
 }
-resource "aws_security_group_rule" "httpAnywhere" {
+resource "aws_security_group_rule" "app-httpAnywhere-out-fe" {
     type = "egress"
     from_port = 8080
     to_port = 8080
     protocol = "tcp"
     cidr_blocks = [ "0.0.0.0/0" ]
     security_group_id = aws_security_group.fe-app-sg.id
-    description = "http-anywhere"
+    description = "http-anywhere-out"
 }
 
 
 # ICMP
-resource "aws_security_group_rule" "ping-Anywhere" {
+resource "aws_security_group_rule" "app-ping-Anywhere-in-fe" {
     type = "ingress"
     from_port = -1
     to_port = -1
@@ -125,14 +125,14 @@ resource "aws_security_group_rule" "ping-Anywhere" {
     security_group_id = aws_security_group.fe-app-sg.id
     description = "ping-anywhere"
 }
-resource "aws_security_group_rule" "ping-Anywhere" {
+resource "aws_security_group_rule" "app-ping-Anywhere-out-fe" {
     type = "egress"
     from_port = -1
     to_port = -1
     protocol = "icmp"
     cidr_blocks = [ "0.0.0.0/0" ]
     security_group_id = aws_security_group.fe-app-sg.id
-    description = "ping-anywhere"
+    description = "ping-anywhere-out"
 }
 
 
@@ -160,86 +160,86 @@ resource "aws_security_group" "be-admin-sg" {
 
 
 # In/Outbound HTTP
-resource "aws_security_group_rule" "httpLocal" {
+resource "aws_security_group_rule" "httpLocal-in-be-admin" {
     type = "ingress"
     from_port = 8080
     to_port = 8080
     protocol = "tcp"
-    cidr_blocks = [ vars.bandCloud-network.cidrBlock ]
+    cidr_blocks = [ var.bandCloud-network.cidrBlock ]
     security_group_id = aws_security_group.be-admin-sg.id
-    description = "http-local"
+    description = "http-local-in"
 }
-resource "aws_security_group_rule" "httpLocal" {
+resource "aws_security_group_rule" "httpLocal-out-be-admin" {
     type = "egress"
     from_port = 8080
     to_port = 8080
     protocol = "tcp"
-    cidr_blocks = [ vars.bandCloud-network.cidrBlock ]
+    cidr_blocks = [ var.bandCloud-network.cidrBlock ]
     security_group_id = aws_security_group.be-admin-sg.id
-    description = "http-local"
+    description = "http-local-out"
 }
 
 
 # In/Outbound HTTPs
-resource "aws_security_group_rule" "httpsLocal" {
+resource "aws_security_group_rule" "httpsLocal-in-be-admin" {
     type = "ingress"
     from_port = 443
     to_port = 443
     protocol = "tcp"
-    cidr_blocks = [ vars.bandCloud-network.cidrBlock ]
+    cidr_blocks = [ var.bandCloud-network.cidrBlock ]
     security_group_id = aws_security_group.be-admin-sg.id
-    description = "https-local"
+    description = "https-local-in"
 }
-resource "aws_security_group_rule" "httpsLocal" {
+resource "aws_security_group_rule" "httpsLocal-out-be-admin" {
     type = "egress"
     from_port = 443
     to_port = 443
     protocol = "tcp"
-    cidr_blocks = [ vars.bandCloud-network.cidrBlock ]
+    cidr_blocks = [ var.bandCloud-network.cidrBlock ]
     security_group_id = aws_security_group.be-admin-sg.id
-    description = "https-local"
+    description = "https-local-out"
 }
 
 
 # Permit locl ssh traffic
-resource "aws_security_group_rule" "ssh-Local" {
-    type = "egress"
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    cidr_blocks = [ vars.bandCloud-network.cidrBlock ]
-    security_group_id = aws_security_group.be-admin-sg.id
-    description = "ssh-local"
-}
-resource "aws_security_group_rule" "ssh-Local" {
+resource "aws_security_group_rule" "ssh-Local-in-be-admin" {
     type = "ingress"
     from_port = 22
     to_port = 22
     protocol = "tcp"
-    cidr_blocks = [ vars.bandCloud-network.cidrBlock ]
+    cidr_blocks = [ var.bandCloud-network.cidrBlock ]
     security_group_id = aws_security_group.be-admin-sg.id
-    description = "ssh-local"
+    description = "ssh-local-in"
+}
+resource "aws_security_group_rule" "ssh-Local-out-be-admin" {
+    type = "egress"
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    cidr_blocks = [ var.bandCloud-network.cidrBlock ]
+    security_group_id = aws_security_group.be-admin-sg.id
+    description = "ssh-local-out"
 }
 
 
 # ICMP
-resource "aws_security_group_rule" "ping-Local" {
+resource "aws_security_group_rule" "ping-Local-in-be-admin" {
     type = "ingress"
     from_port = -1
     to_port = -1
     protocol = "icmp"
-    cidr_blocks = [ vars.bandCloud-network.cidrBlock ]
+    cidr_blocks = [ var.bandCloud-network.cidrBlock ]
     security_group_id = aws_security_group.be-admin-sg.id
-    description = "ping-local"
+    description = "ping-local-in"
 }
-resource "aws_security_group_rule" "ping-Local" {
+resource "aws_security_group_rule" "ping-Local-out-be-admin" {
     type = "egress"
     from_port = -1
     to_port = -1
     protocol = "icmp"
-    cidr_blocks = [ vars.bandCloud-network.cidrBlock ]
+    cidr_blocks = [ var.bandCloud-network.cidrBlock ]
     security_group_id = aws_security_group.be-admin-sg.id
-    description = "ping-local"
+    description = "ping-local-out"
 }
 
 
@@ -257,11 +257,6 @@ resource "aws_security_group" "be-app-sg" {
 }
 
 
-
-
-
-
-
 #################################
 # 
 # Local Traffic
@@ -269,77 +264,63 @@ resource "aws_security_group" "be-app-sg" {
 #################################
 
 # Permit local http
-resource "aws_security_group" "local-http" {
-    name = "local-http"
-    vpc_id = aws_vpc.bandCloud-VPC.id
-    tags = {
-        Name = "local-http"
-    }
-
-    # Allow inbound
-    ingress {
-        from_port = 8080
-        to_port = 8080
-        protocol = "tcp"
-        cidr_blocks = [ vars.bandCloud-network.cidrBlock ]
-    }
-
-    # Allow outbound
-    egress {
-        from_port = 8080
-        to_port = 8080
-        protocol = "-1"
-        cidr_blocks = [ vars.bandCloud-network.cidrBlock ]
-    }
+resource "aws_security_group_rule" "app-httpLocal-in" {
+    type = "ingress"
+    from_port = 8080
+    to_port = 8080
+    protocol = "tcp"
+    cidr_blocks = [ var.bandCloud-network.cidrBlock ]
+    security_group_id = aws_security_group.be-app-sg.id
+    description = "app-http-local-in"
+}
+resource "aws_security_group_rule" "app-httpLocal-out" {
+    type = "egress"
+    from_port = 8080
+    to_port = 8080
+    protocol = "tcp"
+    cidr_blocks = [ var.bandCloud-network.cidrBlock ]
+    security_group_id = aws_security_group.be-app-sg.id
+    description = "app-http-local-out"
 }
 
-# SSh
-resource "aws_security_group" "local-ssh" {
-    name = "local-ssh"
-    vpc_id = aws_vpc.bandCloud-VPC.id
-    tags = {
-        Name = "local-ssh"
-    }
 
-    # Allow inbound
-    ingress {
-        from_port = 22
-        to_port = 22
-        protocol = "tcp"
-        cidr_blocks = [ vars.bandCloud-network.cidrBlock ]
-    }
-
-    # Allow outbound
-    egress {
-        from_port = 22
-        to_port = 22
-        protocol = "-1"
-        cidr_blocks = [ vars.bandCloud-network.cidrBlock ]
-    }
+# In/Outbound HTTPs
+resource "aws_security_group_rule" "app-httpsLocal" {
+    type = "ingress"
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+    cidr_blocks = [ var.bandCloud-network.cidrBlock ]
+    security_group_id = aws_security_group.be-app-sg.id
+    description = "app-https-local-in"
+}
+resource "aws_security_group_rule" "app-httpsLocal-out" {
+    type = "egress"
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+    cidr_blocks = [ var.bandCloud-network.cidrBlock ]
+    security_group_id = aws_security_group.be-admin-sg.id
+    description = "https-local-out"
 }
 
 
 # ICMP
-resource "aws_security_group" "local-ping" {
-    name = "local-ping"
-    vpc_id = aws_vpc.bandCloud-VPC.id
-    tags = {
-        Name = "local-ping"
-    }
-
-    # Allow inbound
-    ingress {
-        from_port = -1
-        to_port = -1
-        protocol = "icmp"
-        cidr_blocks = [ vars.bandCloud-network.cidrBlock ]
-    }
-
-    # Allow outbound
-    egress {
-        from_port = -1
-        to_port = -1
-        protocol = "icmp"
-        cidr_blocks = [ vars.bandCloud-network.cidrBlock ]
-    }
+resource "aws_security_group_rule" "app-ping-Local-in" {
+    type = "ingress"
+    from_port = -1
+    to_port = -1
+    protocol = "icmp"
+    cidr_blocks = [ var.bandCloud-network.cidrBlock ]
+    security_group_id = aws_security_group.be-app-sg.id
+    description = "app-ping-local-in"
+}
+resource "aws_security_group_rule" "app-ping-Local-out" {
+    type = "egress"
+    from_port = -1
+    to_port = -1
+    protocol = "icmp"
+    cidr_blocks = [ var.bandCloud-network.cidrBlock ]
+    security_group_id = aws_security_group.be-app-sg.id
+    description = "app-ping-local-out"
 }

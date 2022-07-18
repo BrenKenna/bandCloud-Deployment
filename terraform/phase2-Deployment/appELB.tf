@@ -10,7 +10,7 @@ resource "aws_lb" "fe-app-elb" {
     load_balancer_type = "application"
     internal = false
     subnets = [ aws_subnet.frontend-SubA.id, aws_subnet.frontend-SubB.id ]
-    security_groups = [ aws_security_group.httpAnywhere.id ] 
+    security_groups = [ aws_security_group.fe-app-sg.id ] 
 }
 
 # Listener
@@ -81,7 +81,7 @@ resource "aws_lb" "be-app-elb" {
     load_balancer_type = "application"
     internal = true
     subnets = [ aws_subnet.backend-SubA.id, aws_subnet.backend-SubB.id ]
-    security_groups = [ aws_security_group.httpAnywhere.id ] 
+    security_groups = [ aws_security_group.be-app-sg.id ] 
 }
 
 # Listener

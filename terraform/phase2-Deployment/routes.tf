@@ -81,7 +81,7 @@ resource "aws_route_table" "be-rtb-priv" {
 resource "aws_route" "be-route-nat" {
     route_table_id = aws_route_table.be-rtb-priv.id
     destination_cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.nat-be
+    gateway_id = aws_nat_gateway.nat-be.id
 }
 
 # Add a route to private subnet-A

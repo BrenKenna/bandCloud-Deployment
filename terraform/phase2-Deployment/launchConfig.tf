@@ -10,7 +10,7 @@ resource "aws_launch_configuration" "frontend-LC-1a" {
     image_id = var.app_vars.appAMIs.az1a
     instance_type = var.app_vars.appInstanceType
     key_name = var.app_vars.appKey
-    security_groups = [ aws_security_group.httpAnywhere.id ]
+    security_groups = [ aws_security_group.fe-app-sg.id ]
     iam_instance_profile  = var.app_vars.iamRole
     associate_public_ip_address = true
     user_data = <<-EOF
@@ -45,7 +45,7 @@ resource "aws_launch_configuration" "frontend-LC-1b" {
     image_id = var.app_vars.appAMIs.az1b
     instance_type = var.app_vars.appInstanceType
     key_name = var.app_vars.appKey
-    security_groups = [ aws_security_group.httpAnywhere.id ]
+    security_groups = [ aws_security_group.fe-app-sg.id ]
     iam_instance_profile  = var.app_vars.iamRole
     associate_public_ip_address = true
     user_data = <<-EOF
@@ -82,7 +82,7 @@ resource "aws_launch_configuration" "backend-LC-1a" {
     image_id = var.app_vars.appAMIs.az1a
     instance_type = var.app_vars.appInstanceType
     key_name = var.app_vars.appKey
-    security_groups = [ aws_security_group.httpAnywhere.id ]
+    security_groups = [ aws_security_group.be-app-sg.id ]
     iam_instance_profile  = var.app_vars.iamRole
     associate_public_ip_address = false
     user_data = <<-EOF
@@ -117,7 +117,7 @@ resource "aws_launch_configuration" "backend-LC-1b" {
     image_id = var.app_vars.appAMIs.az1b
     instance_type = var.app_vars.appInstanceType
     key_name = var.app_vars.appKey
-    security_groups = [ aws_security_group.httpAnywhere.id ]
+    security_groups = [ aws_security_group.be-app-sg.id ]
     iam_instance_profile  = var.app_vars.iamRole
     associate_public_ip_address = false
     user_data = <<-EOF
