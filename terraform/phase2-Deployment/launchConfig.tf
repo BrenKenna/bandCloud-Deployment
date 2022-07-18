@@ -84,7 +84,7 @@ resource "aws_launch_configuration" "backend-LC-1a" {
     key_name = var.app_vars.appKey
     security_groups = [ aws_security_group.httpAnywhere.id ]
     iam_instance_profile  = var.app_vars.iamRole
-    associate_public_ip_address = true
+    associate_public_ip_address = false
     user_data = <<-EOF
                 #!/bin/bash
 
@@ -119,7 +119,7 @@ resource "aws_launch_configuration" "backend-LC-1b" {
     key_name = var.app_vars.appKey
     security_groups = [ aws_security_group.httpAnywhere.id ]
     iam_instance_profile  = var.app_vars.iamRole
-    associate_public_ip_address = true
+    associate_public_ip_address = false
     user_data = <<-EOF
                 #!/bin/bash
 
