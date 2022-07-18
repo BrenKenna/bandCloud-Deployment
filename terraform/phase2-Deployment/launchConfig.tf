@@ -12,7 +12,6 @@ resource "aws_launch_configuration" "frontend-LC-1a" {
     key_name = var.app_vars.appKey
     security_groups = [
         aws_security_group.http-external-dev.id,
-        aws_security_group.ping-external.id,
         aws_security_group.ssh-external.id
     ]
     iam_instance_profile  = var.app_vars.iamRole
@@ -51,7 +50,6 @@ resource "aws_launch_configuration" "frontend-LC-1b" {
     key_name = var.app_vars.appKey
     security_groups = [
         aws_security_group.http-external-dev.id,
-        aws_security_group.ping-external.id,
         aws_security_group.ssh-external.id
     ]
     iam_instance_profile  = var.app_vars.iamRole
@@ -93,7 +91,6 @@ resource "aws_launch_configuration" "backend-LC-1a" {
     security_groups = [
         aws_security_group.http-internal-dev.id,
         aws_security_group.https-internal.id,
-        aws_security_group.ping-internal.id,
         aws_security_group.ssh-internal.id,
     ]
     iam_instance_profile  = var.app_vars.iamRole
@@ -133,7 +130,6 @@ resource "aws_launch_configuration" "backend-LC-1b" {
     security_groups = [
         aws_security_group.http-internal-dev.id,
         aws_security_group.https-internal.id,
-        aws_security_group.ping-internal.id,
         aws_security_group.ssh-internal.id,
     ]
     iam_instance_profile  = var.app_vars.iamRole

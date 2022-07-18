@@ -54,7 +54,8 @@ resource "aws_security_group" "ssh-external" {
 }
 
 
-# Allow external HTTP traffic
+/*
+# Allow external ICMP traffic
 resource "aws_security_group" "ping-external" {
     name = "ping-external"
     vpc_id = aws_vpc.bandCloud-VPC.id
@@ -73,6 +74,7 @@ resource "aws_security_group" "ping-external" {
         description = "ping-external-out"
     }
 }
+*/
 
 ###################################
 ###################################
@@ -124,6 +126,7 @@ resource "aws_security_group" "ssh-internal" {
 }
 
 
+/*
 # ICMP
 resource "aws_security_group" "ping-internal" {
     name = "ping-internal"
@@ -143,7 +146,7 @@ resource "aws_security_group" "ping-internal" {
         description = "ping-local-out"
     }
 }
-
+*/
 
 # Allow HTTPs
 resource "aws_security_group" "https-internal" {

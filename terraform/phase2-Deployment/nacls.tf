@@ -26,7 +26,7 @@ resource "aws_network_acl" "fe-admin-nacl" {
     vpc_id = aws_vpc.bandCloud-VPC.id
     subnet_ids = [ aws_subnet.frontend-SubA.id, aws_subnet.frontend-SubB.id ]
     tags = {
-        Name = "bandCloud-fe-admin-nacl"
+        Name = "fe-admin-nacl"
     }
 }
 
@@ -114,7 +114,7 @@ resource "aws_network_acl" "be-admin-nacl" {
     vpc_id = aws_vpc.bandCloud-VPC.id
     subnet_ids = [ aws_subnet.backend-SubA.id, aws_subnet.backend-SubB.id ]
     tags = {
-        Name = "bandCloud-be-admin-nacl"
+        Name = "be-admin-nacl"
     }
 }
 
@@ -223,7 +223,7 @@ resource "aws_network_acl" "fe-app-nacl" {
     vpc_id = aws_vpc.bandCloud-VPC.id
     subnet_ids = [ aws_subnet.frontend-SubA.id, aws_subnet.frontend-SubB.id ]
     tags = {
-        Name = "bandCloud-fe-app-nacl"
+        Name = "fe-app-nacl"
     }
 }
 
@@ -290,7 +290,7 @@ resource "aws_network_acl" "be-app-nacl" {
     vpc_id = aws_vpc.bandCloud-VPC.id
     subnet_ids = [ aws_subnet.backend-SubA.id, aws_subnet.backend-SubB.id ]
     tags = {
-        Name = "bandCloud-be-app-nacl"
+        Name = "be-app-nacl"
     }
 }
 
