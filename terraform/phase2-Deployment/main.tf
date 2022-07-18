@@ -92,7 +92,7 @@ resource "aws_instance" "backend-test-1a" {
     key_name = var.app_vars.appKey
     security_groups = [ aws_security_group.httpAnywhere.id, aws_security_group.sg22.id ]
     iam_instance_profile  = var.app_vars.iamRole
-    associate_public_ip_address = true
+    associate_public_ip_address = false
     subnet_id = aws_subnet.backend-SubA.id
     tags = {
         Name = "backend-test-1a"
@@ -126,7 +126,7 @@ resource "aws_instance" "backend-test-1b" {
     key_name = var.app_vars.appKey
     security_groups = [ aws_security_group.httpAnywhere.id, aws_security_group.sg22.id ]
     iam_instance_profile  = var.app_vars.iamRole
-    associate_public_ip_address = true
+    associate_public_ip_address = false
     subnet_id = aws_subnet.backend-SubB.id
     tags = {
         Name = "backend-test-1b"
