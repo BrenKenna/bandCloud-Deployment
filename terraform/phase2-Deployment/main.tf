@@ -14,7 +14,11 @@ resource "aws_instance" "frontend-test-1a" {
     ami = var.app_vars.appAMIs.az1a
     instance_type = var.app_vars.appInstanceType
     key_name = var.app_vars.appKey
-    security_groups = [ aws_security_group.fe-admin-sg.id ]
+    security_groups = [
+        aws_security_group.http-external-dev.id,
+        aws_security_group.ping-external.id,
+        aws_security_group.ssh-external.id
+    ]
     iam_instance_profile  = var.app_vars.iamRole
     associate_public_ip_address = true
     subnet_id = aws_subnet.frontend-SubA.id
@@ -49,7 +53,11 @@ resource "aws_instance" "frontend-testing-1b" {
     ami = var.app_vars.appAMIs.az1a
     instance_type = var.app_vars.appInstanceType
     key_name = var.app_vars.appKey
-    security_groups = [ aws_security_group.fe-admin-sg.id ]
+    security_groups = [
+        aws_security_group.http-external-dev.id,
+        aws_security_group.ping-external.id,
+        aws_security_group.ssh-external.id
+    ]
     iam_instance_profile  = var.app_vars.iamRole
     associate_public_ip_address = true
     subnet_id = aws_subnet.frontend-SubB.id
@@ -90,7 +98,12 @@ resource "aws_instance" "backend-test-1a" {
     ami = var.app_vars.appAMIs.az1a
     instance_type = var.app_vars.appInstanceType
     key_name = var.app_vars.appKey
-    security_groups = [ aws_security_group.be-admin-sg.id ]
+    security_groups = [
+        aws_security_group.http-internal-dev.id,
+        aws_security_group.https-internal.id,
+        aws_security_group.ping-internal.id,
+        aws_security_group.ssh-internal.id
+    ]
     iam_instance_profile  = var.app_vars.iamRole
     associate_public_ip_address = false
     subnet_id = aws_subnet.backend-SubA.id
@@ -124,7 +137,12 @@ resource "aws_instance" "backend-test-1b" {
     ami = var.app_vars.appAMIs.az1a
     instance_type = var.app_vars.appInstanceType
     key_name = var.app_vars.appKey
-    security_groups = [ aws_security_group.be-admin-sg.id ]
+    security_groups = [
+        aws_security_group.http-internal-dev.id,
+        aws_security_group.https-internal.id,
+        aws_security_group.ping-internal.id,
+        aws_security_group.ssh-internal.id
+    ]
     iam_instance_profile  = var.app_vars.iamRole
     associate_public_ip_address = false
     subnet_id = aws_subnet.backend-SubB.id
