@@ -175,6 +175,79 @@ resource "aws_network_acl_rule" "outbound_emphem-fe-admin" {
     ]
 }
 
+
+# Allow HTTPs traffic
+resource "aws_network_acl_rule" "inbound_https-fe-admin" {
+    network_acl_id = aws_network_acl.fe-admin-nacl.id
+    rule_number = 140
+    egress = false
+    protocol = "tcp"
+    rule_action = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port = 443
+    to_port = 443
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
+}
+
+resource "aws_network_acl_rule" "outbound_https-fe-admin" {
+    network_acl_id = aws_network_acl.fe-admin-nacl.id
+    rule_number = 140
+    egress = true
+    protocol = "tcp"
+    rule_action = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port = 443
+    to_port = 443
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
+}
+
+
+# Allow HTTP traffic
+resource "aws_network_acl_rule" "inbound_http-norm-fe-admin" {
+    network_acl_id = aws_network_acl.fe-admin-nacl.id
+    rule_number = 150
+    egress = false
+    protocol = "tcp"
+    rule_action = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port = 80
+    to_port = 80
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
+}
+
+resource "aws_network_acl_rule" "outbound_http-norm-fe-admin" {
+    network_acl_id = aws_network_acl.fe-admin-nacl.id
+    rule_number = 150
+    egress = true
+    protocol = "tcp"
+    rule_action = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port = 80
+    to_port = 80
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
+}
+
+
 ###############################
 #
 # Create backend admin-nacl
@@ -214,7 +287,7 @@ resource "aws_network_acl_rule" "outbound_ssh-be-admin" {
     egress = true
     protocol = "tcp"
     rule_action = "allow"
-    cidr_block = "${var.bandCloud-network.cidrBlock}"
+    cidr_block = "0.0.0.0/0"
     from_port = 22
     to_port = 22
     depends_on = [
@@ -249,7 +322,7 @@ resource "aws_network_acl_rule" "outbound_http-be-admin" {
     egress = true
     protocol = "tcp"
     rule_action = "allow"
-    cidr_block = "${var.bandCloud-network.cidrBlock}"
+    cidr_block = "0.0.0.0/0"
     from_port = 8080
     to_port = 8080
     depends_on = [
@@ -286,30 +359,11 @@ resource "aws_network_acl_rule" "outbound_ping-be-admin" {
     egress = true
     protocol = "icmp"
     rule_action = "allow"
-    cidr_block = "${var.bandCloud-network.cidrBlock}"
+    cidr_block = "0.0.0.0/0"
     from_port = -1
     to_port = -1
     icmp_type = -1
     icmp_code = -1
-    depends_on = [
-        aws_network_acl.be-admin-nacl,
-        aws_network_acl.fe-admin-nacl,
-        aws_network_acl.fe-app-nacl,
-        aws_network_acl.be-app-nacl
-    ]
-}
-
-
-# Outbound https
-resource "aws_network_acl_rule" "outbound_https-be-admin" {
-    network_acl_id = aws_network_acl.be-admin-nacl.id
-    rule_number = 130
-    egress = true
-    protocol = "tcp"
-    rule_action = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port = 443
-    to_port = 443
     depends_on = [
         aws_network_acl.be-admin-nacl,
         aws_network_acl.fe-admin-nacl,
@@ -342,9 +396,27 @@ resource "aws_network_acl_rule" "outbound_emphem-be-admin" {
     egress = true
     protocol = "tcp"
     rule_action = "allow"
-    cidr_block = "${var.bandCloud-network.cidrBlock}"
+    cidr_block = "0.0.0.0/0"
     from_port = 1024
     to_port = 65535
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
+}
+
+# Outbound HTTPs
+resource "aws_network_acl_rule" "outbound_https-be-admin" {
+    network_acl_id = aws_network_acl.be-admin-nacl.id
+    rule_number = 140
+    egress = true
+    protocol = "tcp"
+    rule_action = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port = 443
+    to_port = 443
     depends_on = [
         aws_network_acl.be-admin-nacl,
         aws_network_acl.fe-admin-nacl,
@@ -370,7 +442,7 @@ resource "aws_network_acl_rule" "outbound_emphem-be-admin" {
 # Create nacl
 resource "aws_network_acl" "fe-app-nacl" {
     vpc_id = aws_vpc.bandCloud-VPC.id
-    subnet_ids = [ aws_subnet.frontend-SubA.id, aws_subnet.frontend-SubB.id ]
+    # subnet_ids = [ aws_subnet.frontend-SubA.id, aws_subnet.frontend-SubB.id ]
     tags = {
         Name = "fe-app-nacl"
     }
@@ -433,7 +505,7 @@ resource "aws_network_acl_rule" "inbound_ping-fe-app" {
 }
 resource "aws_network_acl_rule" "outbound_ping-fe-app" {
     network_acl_id = aws_network_acl.fe-app-nacl.id
-    rule_number = 120
+    rule_number = 110
     egress = true
     protocol = "icmp"
     rule_action = "allow"
@@ -454,7 +526,7 @@ resource "aws_network_acl_rule" "outbound_ping-fe-app" {
 # Allow emphemeral
 resource "aws_network_acl_rule" "inbound_emphem-fe-app" {
     network_acl_id = aws_network_acl.fe-app-nacl.id
-    rule_number = 130
+    rule_number = 120
     egress = false
     protocol = "tcp"
     rule_action = "allow"
@@ -470,7 +542,7 @@ resource "aws_network_acl_rule" "inbound_emphem-fe-app" {
 }
 resource "aws_network_acl_rule" "outbound_emphem-fe-app" {
     network_acl_id = aws_network_acl.fe-app-nacl.id
-    rule_number = 130
+    rule_number = 120
     egress = true
     protocol = "tcp"
     rule_action = "allow"
@@ -496,7 +568,7 @@ resource "aws_network_acl_rule" "outbound_emphem-fe-app" {
 # Create nacl
 resource "aws_network_acl" "be-app-nacl" {
     vpc_id = aws_vpc.bandCloud-VPC.id
-    subnet_ids = [ aws_subnet.backend-SubA.id, aws_subnet.backend-SubB.id ]
+    # subnet_ids = [ aws_subnet.backend-SubA.id, aws_subnet.backend-SubB.id ]
     tags = {
         Name = "be-app-nacl"
     }

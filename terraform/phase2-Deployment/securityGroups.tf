@@ -12,8 +12,8 @@
 # 
 ########################
 
-# Allow external HTTP traffic
-resource "aws_security_group" "http-external-dev" {
+# External traffic rules
+resource "aws_security_group" "fe-external-dev" {
     name = "http-external-dev"
     vpc_id = aws_vpc.bandCloud-VPC.id
     ingress {
@@ -21,22 +21,9 @@ resource "aws_security_group" "http-external-dev" {
         to_port = 8080
         protocol = "tcp"
         cidr_blocks = [ "0.0.0.0/0" ]
-        description = "http-external-in"
+        description = "http-dev-external-in"
     }
-    egress {
-        from_port = 0
-        to_port = 0
-        protocol = "-1"
-        cidr_blocks = [ "0.0.0.0/0" ]
-        description = "http-external-out"
-    }
-}
 
-
-# Allow external ssh traffic
-resource "aws_security_group" "ssh-external" {
-    name = "ssh-external"
-    vpc_id = aws_vpc.bandCloud-VPC.id
     ingress {
         from_port = 22
         to_port = 22
@@ -44,14 +31,40 @@ resource "aws_security_group" "ssh-external" {
         cidr_blocks = [ "0.0.0.0/0" ]
         description = "ssh-external-in"
     }
+
+    ingress {
+        from_port = 80
+        to_port = 80
+        protocol = "tcp"
+        cidr_blocks = [ "0.0.0.0/0" ]
+        description = "http-external-in"
+    }
+
+    ingress {
+        from_port = 443
+        to_port = 443
+        protocol = "tcp"
+        cidr_blocks = [ "0.0.0.0/0" ]
+        description = "https-external-in"
+    }
+
     egress {
         from_port = 0
         to_port = 0
         protocol = "-1"
         cidr_blocks = [ "0.0.0.0/0" ]
-        description = "ssh-external-out"
+        description = "all-external-out"
+    }
+
+    egress {
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
+        cidr_blocks = [ "::0/0" ]
+        description = "all-ipv6-external-out"
     }
 }
+
 
 
 /*
@@ -84,10 +97,27 @@ resource "aws_security_group" "ping-external" {
 ###################################
 ###################################
 
-# Allow local HTTP traffic
-resource "aws_security_group" "http-internal-dev" {
-    name = "http-internal-dev"
+
+# Local traffic rules
+resource "aws_security_group" "be-internal-dev" {
+    name = "https-internal"
     vpc_id = aws_vpc.bandCloud-VPC.id
+    ingress{
+        from_port = 443
+        to_port = 443
+        protocol = "tcp"
+        cidr_blocks = [ "${var.bandCloud-network.cidrBlock}" ]
+        description = "https-internal-in"
+    }
+
+    ingress {
+        from_port = 22
+        to_port = 22
+        protocol = "tcp"
+        cidr_blocks = [ "${var.bandCloud-network.cidrBlock}" ]
+        description = "ssh-internal-in"
+    }
+
     ingress {
         from_port = 8080
         to_port = 8080
@@ -99,29 +129,16 @@ resource "aws_security_group" "http-internal-dev" {
         from_port = 0
         to_port = 0
         protocol = "-1"
-        cidr_blocks = [ "${var.bandCloud-network.cidrBlock}" ]
-        description = "http-internal-out"
+        cidr_blocks = [ "0.0.0.0/0" ]
+        description = "all-internal-out"
     }
-}
 
-
-# Permit locl ssh traffic
-resource "aws_security_group" "ssh-internal" {
-    name = "ssh-internal"
-    vpc_id = aws_vpc.bandCloud-VPC.id
-    ingress {
-        from_port = 22
-        to_port = 22
-        protocol = "tcp"
-        cidr_blocks = [ "${var.bandCloud-network.cidrBlock}" ]
-        description = "ssh-internal-in"
-    }
     egress {
         from_port = 0
         to_port = 0
         protocol = "-1"
-        cidr_blocks = [ "${var.bandCloud-network.cidrBlock}" ]
-        description = "ssh-internal-out"
+        cidr_blocks = [ "::0/0" ]
+        description = "all-ipv6-external-out"
     }
 }
 
@@ -147,23 +164,3 @@ resource "aws_security_group" "ping-internal" {
     }
 }
 */
-
-# Allow HTTPs
-resource "aws_security_group" "https-internal" {
-    name = "https-internal"
-    vpc_id = aws_vpc.bandCloud-VPC.id
-    ingress {
-        from_port = 443
-        to_port = 443
-        protocol = "tcp"
-        cidr_blocks = [ "${var.bandCloud-network.cidrBlock}" ]
-        description = "https-internal-in"
-    }
-    egress {
-        from_port = 0
-        to_port = 0
-        protocol = "-1"
-        cidr_blocks = [ "${var.bandCloud-network.cidrBlock}" ]
-        description = "https-internal-out"
-    }
-}
