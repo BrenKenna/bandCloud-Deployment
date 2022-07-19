@@ -6,6 +6,8 @@
 # Had to add a rule for 1024-65355 for enabling ssh etc
 #   -> Should be an approachable to close down, 
 #       but nice to know its functional at least
+#   -> Since the NAT-Gateway is in the PubSub-A, web
+#       traffic from Priv-Subs should be allowed + ephem
 # 
 #########################################################
 #########################################################
@@ -380,7 +382,7 @@ resource "aws_network_acl_rule" "inbound_emphem-be-admin" {
     egress = false
     protocol = "tcp"
     rule_action = "allow"
-    cidr_block = "${var.bandCloud-network.cidrBlock}"
+    cidr_block = "0.0.0.0/0"
     from_port = 1024
     to_port = 65535
     depends_on = [
@@ -649,29 +651,11 @@ resource "aws_network_acl_rule" "outbound_ping-be-app" {
 }
 
 
-# Allow https out
-resource "aws_network_acl_rule" "outbound_https-be-app" {
-    network_acl_id = aws_network_acl.be-app-nacl.id
-    rule_number = 120
-    egress = true
-    protocol = "tcp"
-    rule_action = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port = 443
-    to_port = 443
-    depends_on = [
-        aws_network_acl.be-admin-nacl,
-        aws_network_acl.fe-admin-nacl,
-        aws_network_acl.fe-app-nacl,
-        aws_network_acl.be-app-nacl
-    ]
-}
-
 
 # Allow emphemeral
 resource "aws_network_acl_rule" "inbound_emphem-be-app" {
-    network_acl_id = aws_network_acl.be-admin-nacl.id
-    rule_number = 130
+    network_acl_id = aws_network_acl.be-app-nacl.id
+    rule_number = 120
     egress = false
     protocol = "tcp"
     rule_action = "allow"
@@ -687,13 +671,32 @@ resource "aws_network_acl_rule" "inbound_emphem-be-app" {
 }
 resource "aws_network_acl_rule" "outbound_emphem-be-app" {
     network_acl_id = aws_network_acl.be-app-nacl.id
-    rule_number = 130
+    rule_number = 120
     egress = true
     protocol = "tcp"
     rule_action = "allow"
     cidr_block = "${var.bandCloud-network.cidrBlock}"
     from_port = 1024
     to_port = 65535
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
+}
+
+
+# Allow https out
+resource "aws_network_acl_rule" "outbound_https-be-app" {
+    network_acl_id = aws_network_acl.be-app-nacl.id
+    rule_number = 130
+    egress = true
+    protocol = "tcp"
+    rule_action = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port = 443
+    to_port = 443
     depends_on = [
         aws_network_acl.be-admin-nacl,
         aws_network_acl.fe-admin-nacl,

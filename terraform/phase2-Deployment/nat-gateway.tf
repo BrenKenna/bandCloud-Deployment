@@ -12,7 +12,7 @@ resource "aws_eip" "eip-be" {
 }
 resource "aws_nat_gateway" "nat-be" {
     allocation_id = aws_eip.eip-be.id
-    subnet_id = aws_subnet.backend-SubA.id
+    subnet_id = aws_subnet.frontend-SubA.id
     tags = {
         Name = "nat-be-a"
     }
@@ -27,7 +27,7 @@ resource "aws_eip" "eip-be-b" {
 }
 resource "aws_nat_gateway" "nat-be-b" {
     allocation_id = aws_eip.eip-be-b.id
-    subnet_id = aws_subnet.backend-SubB.id
+    subnet_id = aws_subnet.frontend-SubB.id
     tags = {
         Name = "nat-be-b"
     }

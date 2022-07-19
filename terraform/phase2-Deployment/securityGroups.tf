@@ -55,14 +55,6 @@ resource "aws_security_group" "fe-external-dev" {
         cidr_blocks = [ "0.0.0.0/0" ]
         description = "all-external-out"
     }
-
-    egress {
-        from_port = 0
-        to_port = 0
-        protocol = "-1"
-        cidr_blocks = [ "::0/0" ]
-        description = "all-ipv6-external-out"
-    }
 }
 
 
@@ -132,18 +124,21 @@ resource "aws_security_group" "be-internal-dev" {
         cidr_blocks = [ "0.0.0.0/0" ]
         description = "all-internal-out"
     }
+}
+
+
+/*
+
 
     egress {
         from_port = 0
         to_port = 0
         protocol = "-1"
-        cidr_blocks = [ "::0/0" ]
+        cidr_blocks = [ "::/0" ]
         description = "all-ipv6-external-out"
     }
-}
 
 
-/*
 # ICMP
 resource "aws_security_group" "ping-internal" {
     name = "ping-internal"
