@@ -44,6 +44,12 @@ resource "aws_network_acl_rule" "inbound_ssh-fe-admin" {
     cidr_block = "0.0.0.0/0"
     from_port = 22
     to_port = 22
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 resource "aws_network_acl_rule" "outbound_ssh-fe-admin" {
     network_acl_id = aws_network_acl.fe-admin-nacl.id
@@ -54,6 +60,12 @@ resource "aws_network_acl_rule" "outbound_ssh-fe-admin" {
     cidr_block = "0.0.0.0/0"
     from_port = 22
     to_port = 22
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 
 # Allow http-8080
@@ -66,6 +78,12 @@ resource "aws_network_acl_rule" "inbound_http-fe-admin" {
     cidr_block = "0.0.0.0/0"
     from_port = 8080
     to_port = 8080
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 resource "aws_network_acl_rule" "outbound_http-fe-admin" {
     network_acl_id = aws_network_acl.fe-admin-nacl.id
@@ -76,6 +94,12 @@ resource "aws_network_acl_rule" "outbound_http-fe-admin" {
     cidr_block = "0.0.0.0/0"
     from_port = 8080
     to_port = 8080
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 
 
@@ -91,6 +115,12 @@ resource "aws_network_acl_rule" "inbound_ping-fe-admin" {
     to_port = -1
     icmp_type = -1
     icmp_code = -1
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 resource "aws_network_acl_rule" "outbound_ping-fe-admin" {
     network_acl_id = aws_network_acl.fe-admin-nacl.id
@@ -103,6 +133,12 @@ resource "aws_network_acl_rule" "outbound_ping-fe-admin" {
     to_port = -1
     icmp_type = -1
     icmp_code = -1
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 
 # Allow emphemeral
@@ -115,6 +151,12 @@ resource "aws_network_acl_rule" "inbound_emphem-fe-admin" {
     cidr_block = "0.0.0.0/0"
     from_port = 1024
     to_port = 65535
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 resource "aws_network_acl_rule" "outbound_emphem-fe-admin" {
     network_acl_id = aws_network_acl.fe-admin-nacl.id
@@ -125,6 +167,12 @@ resource "aws_network_acl_rule" "outbound_emphem-fe-admin" {
     cidr_block = "0.0.0.0/0"
     from_port = 1024
     to_port = 65535
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 
 ###############################
@@ -153,6 +201,12 @@ resource "aws_network_acl_rule" "inbound_ssh-be-admin" {
     cidr_block = "${var.bandCloud-network.cidrBlock}"
     from_port = 22
     to_port = 22
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 resource "aws_network_acl_rule" "outbound_ssh-be-admin" {
     network_acl_id = aws_network_acl.be-admin-nacl.id
@@ -163,6 +217,12 @@ resource "aws_network_acl_rule" "outbound_ssh-be-admin" {
     cidr_block = "${var.bandCloud-network.cidrBlock}"
     from_port = 22
     to_port = 22
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 
 
@@ -176,6 +236,12 @@ resource "aws_network_acl_rule" "inbound_http-be-admin" {
     cidr_block = "${var.bandCloud-network.cidrBlock}"
     from_port = 8080
     to_port = 8080
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 resource "aws_network_acl_rule" "outbound_http-be-admin" {
     network_acl_id = aws_network_acl.be-admin-nacl.id
@@ -186,6 +252,12 @@ resource "aws_network_acl_rule" "outbound_http-be-admin" {
     cidr_block = "${var.bandCloud-network.cidrBlock}"
     from_port = 8080
     to_port = 8080
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 
 
@@ -201,6 +273,12 @@ resource "aws_network_acl_rule" "inbound_ping-be-admin" {
     to_port = -1
     icmp_type = -1
     icmp_code = -1
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 resource "aws_network_acl_rule" "outbound_ping-be-admin" {
     network_acl_id = aws_network_acl.be-admin-nacl.id
@@ -213,6 +291,12 @@ resource "aws_network_acl_rule" "outbound_ping-be-admin" {
     to_port = -1
     icmp_type = -1
     icmp_code = -1
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 
 
@@ -226,6 +310,12 @@ resource "aws_network_acl_rule" "outbound_https-be-admin" {
     cidr_block = "0.0.0.0/0"
     from_port = 443
     to_port = 443
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 
 
@@ -239,6 +329,12 @@ resource "aws_network_acl_rule" "inbound_emphem-be-admin" {
     cidr_block = "${var.bandCloud-network.cidrBlock}"
     from_port = 1024
     to_port = 65535
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 resource "aws_network_acl_rule" "outbound_emphem-be-admin" {
     network_acl_id = aws_network_acl.be-admin-nacl.id
@@ -249,6 +345,12 @@ resource "aws_network_acl_rule" "outbound_emphem-be-admin" {
     cidr_block = "${var.bandCloud-network.cidrBlock}"
     from_port = 1024
     to_port = 65535
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 
 ####################################
@@ -285,6 +387,12 @@ resource "aws_network_acl_rule" "inbound_http-fe-app" {
     cidr_block = "0.0.0.0/0"
     from_port = 8080
     to_port = 8080
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 resource "aws_network_acl_rule" "outbound_http-fe-app" {
     network_acl_id = aws_network_acl.fe-app-nacl.id
@@ -295,6 +403,12 @@ resource "aws_network_acl_rule" "outbound_http-fe-app" {
     cidr_block = "0.0.0.0/0"
     from_port = 8080
     to_port = 8080
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 
 
@@ -310,6 +424,12 @@ resource "aws_network_acl_rule" "inbound_ping-fe-app" {
     to_port = -1
     icmp_type = -1
     icmp_code = -1
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 resource "aws_network_acl_rule" "outbound_ping-fe-app" {
     network_acl_id = aws_network_acl.fe-app-nacl.id
@@ -322,6 +442,12 @@ resource "aws_network_acl_rule" "outbound_ping-fe-app" {
     to_port = -1
     icmp_type = -1
     icmp_code = -1
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 
 
@@ -335,6 +461,12 @@ resource "aws_network_acl_rule" "inbound_emphem-fe-app" {
     cidr_block = "0.0.0.0/0"
     from_port = 1024
     to_port = 65535
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 resource "aws_network_acl_rule" "outbound_emphem-fe-app" {
     network_acl_id = aws_network_acl.fe-app-nacl.id
@@ -345,6 +477,12 @@ resource "aws_network_acl_rule" "outbound_emphem-fe-app" {
     cidr_block = "0.0.0.0/0"
     from_port = 1024
     to_port = 65535
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 
 
@@ -375,6 +513,12 @@ resource "aws_network_acl_rule" "inbound_http-be-app" {
     cidr_block = "${var.bandCloud-network.cidrBlock}"
     from_port = 8080
     to_port = 8080
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 resource "aws_network_acl_rule" "outbound_http-be-app" {
     network_acl_id = aws_network_acl.be-app-nacl.id
@@ -385,6 +529,12 @@ resource "aws_network_acl_rule" "outbound_http-be-app" {
     cidr_block = "${var.bandCloud-network.cidrBlock}"
     from_port = 8080
     to_port = 8080
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 
 
@@ -400,6 +550,12 @@ resource "aws_network_acl_rule" "inbound_ping-be-app" {
     to_port = -1
     icmp_type = -1
     icmp_code = -1
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 resource "aws_network_acl_rule" "outbound_ping-be-app" {
     network_acl_id = aws_network_acl.be-app-nacl.id
@@ -412,6 +568,12 @@ resource "aws_network_acl_rule" "outbound_ping-be-app" {
     to_port = -1
     icmp_type = -1
     icmp_code = -1
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 
 
@@ -425,6 +587,12 @@ resource "aws_network_acl_rule" "outbound_https-be-app" {
     cidr_block = "0.0.0.0/0"
     from_port = 443
     to_port = 443
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 
 
@@ -438,6 +606,12 @@ resource "aws_network_acl_rule" "inbound_emphem-be-app" {
     cidr_block = "${var.bandCloud-network.cidrBlock}"
     from_port = 1024
     to_port = 65535
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
 resource "aws_network_acl_rule" "outbound_emphem-be-app" {
     network_acl_id = aws_network_acl.be-app-nacl.id
@@ -448,4 +622,10 @@ resource "aws_network_acl_rule" "outbound_emphem-be-app" {
     cidr_block = "${var.bandCloud-network.cidrBlock}"
     from_port = 1024
     to_port = 65535
+    depends_on = [
+        aws_network_acl.be-admin-nacl,
+        aws_network_acl.fe-admin-nacl,
+        aws_network_acl.fe-app-nacl,
+        aws_network_acl.be-app-nacl
+    ]
 }
