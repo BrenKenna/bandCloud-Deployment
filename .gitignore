@@ -4,7 +4,7 @@ certs/*
 node_modules
 app/node_modules
 .git
-tfWebApp.tar.gz
+*tar.gz*
 *zip
 *jar
 .gitignore
@@ -13,7 +13,6 @@ mvn*
 maven*
 *classpath
 .project
-app.zip
+*zip
 plugins
 pcm_stuff
-bandCloud-Angular.tar.gz
