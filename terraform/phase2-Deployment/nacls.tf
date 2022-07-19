@@ -1,10 +1,14 @@
-#################################################
-#################################################
+########################################################
+########################################################
 # 
 # Public & Private Network Access Control List
+#
+# Had to add a rule for 1024-65355 for enabling ssh etc
+#   -> Should be an approachable to close down, 
+#       but nice to know its functional at least
 # 
-#################################################
-#################################################
+#########################################################
+#########################################################
 
 
 ####################################
@@ -101,6 +105,27 @@ resource "aws_network_acl_rule" "outbound_ping-fe-admin" {
     icmp_code = -1
 }
 
+# Allow emphemeral
+resource "aws_network_acl_rule" "inbound_emphem-fe-admin" {
+    network_acl_id = aws_network_acl.fe-admin-nacl.id
+    rule_number = 130
+    egress = false
+    protocol = "tcp"
+    rule_action = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port = 1024
+    to_port = 65535
+}
+resource "aws_network_acl_rule" "outbound_emphem-fe-admin" {
+    network_acl_id = aws_network_acl.fe-admin-nacl.id
+    rule_number = 130
+    egress = true
+    protocol = "tcp"
+    rule_action = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port = 1024
+    to_port = 65535
+}
 
 ###############################
 #
@@ -204,6 +229,28 @@ resource "aws_network_acl_rule" "outbound_https-be-admin" {
 }
 
 
+# Allow emphemeral
+resource "aws_network_acl_rule" "inbound_emphem-be-admin" {
+    network_acl_id = aws_network_acl.be-admin-nacl.id
+    rule_number = 130
+    egress = false
+    protocol = "tcp"
+    rule_action = "allow"
+    cidr_block = "${var.bandCloud-network.cidrBlock}"
+    from_port = 1024
+    to_port = 65535
+}
+resource "aws_network_acl_rule" "outbound_emphem-be-admin" {
+    network_acl_id = aws_network_acl.be-admin-nacl.id
+    rule_number = 130
+    egress = true
+    protocol = "tcp"
+    rule_action = "allow"
+    cidr_block = "${var.bandCloud-network.cidrBlock}"
+    from_port = 1024
+    to_port = 65535
+}
+
 ####################################
 # 
 # Application NACLs
@@ -275,6 +322,29 @@ resource "aws_network_acl_rule" "outbound_ping-fe-app" {
     to_port = -1
     icmp_type = -1
     icmp_code = -1
+}
+
+
+# Allow emphemeral
+resource "aws_network_acl_rule" "inbound_emphem-fe-app" {
+    network_acl_id = aws_network_acl.fe-app-nacl.id
+    rule_number = 130
+    egress = false
+    protocol = "tcp"
+    rule_action = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port = 1024
+    to_port = 65535
+}
+resource "aws_network_acl_rule" "outbound_emphem-fe-app" {
+    network_acl_id = aws_network_acl.fe-app-nacl.id
+    rule_number = 130
+    egress = true
+    protocol = "tcp"
+    rule_action = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port = 1024
+    to_port = 65535
 }
 
 
@@ -355,4 +425,27 @@ resource "aws_network_acl_rule" "outbound_https-be-app" {
     cidr_block = "0.0.0.0/0"
     from_port = 443
     to_port = 443
+}
+
+
+# Allow emphemeral
+resource "aws_network_acl_rule" "inbound_emphem-be-app" {
+    network_acl_id = aws_network_acl.be-admin-nacl.id
+    rule_number = 130
+    egress = false
+    protocol = "tcp"
+    rule_action = "allow"
+    cidr_block = "${var.bandCloud-network.cidrBlock}"
+    from_port = 1024
+    to_port = 65535
+}
+resource "aws_network_acl_rule" "outbound_emphem-be-app" {
+    network_acl_id = aws_network_acl.be-app-nacl.id
+    rule_number = 130
+    egress = true
+    protocol = "tcp"
+    rule_action = "allow"
+    cidr_block = "${var.bandCloud-network.cidrBlock}"
+    from_port = 1024
+    to_port = 65535
 }
