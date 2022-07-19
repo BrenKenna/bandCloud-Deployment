@@ -16,5 +16,5 @@ RUN aws s3 cp s3://bandcloud/app/bandCloud-Angular.tar.gz ./ \
     && tar -xf bandCloud-Angular.tar.gz
 
 # Update start-up working directory
-WORKDIR /workspace/ionic-file-explorer
+WORKDIR /workspace//workspace/bandCloud-Frontend
 # RUN ls
