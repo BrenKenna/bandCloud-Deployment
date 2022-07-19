@@ -24,9 +24,9 @@ resource "aws_security_group" "http-external-dev" {
         description = "http-external-in"
     }
     egress {
-        from_port = 8080
-        to_port = 8080
-        protocol = "tcp"
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
         cidr_blocks = [ "0.0.0.0/0" ]
         description = "http-external-out"
     }
@@ -45,9 +45,9 @@ resource "aws_security_group" "ssh-external" {
         description = "ssh-external-in"
     }
     egress {
-        from_port = 22
-        to_port = 22
-        protocol = "tcp"
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
         cidr_blocks = [ "0.0.0.0/0" ]
         description = "ssh-external-out"
     }
@@ -67,9 +67,9 @@ resource "aws_security_group" "ping-external" {
         description = "ping-external-in"
     }
     egress {
-        from_port = -1
-        to_port = -1
-        protocol = "icmp"
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
         cidr_blocks = [ "0.0.0.0/0" ]
         description = "ping-external-out"
     }
@@ -93,14 +93,14 @@ resource "aws_security_group" "http-internal-dev" {
         to_port = 8080
         protocol = "tcp"
         cidr_blocks = [ "${var.bandCloud-network.cidrBlock}" ]
-        description = "http-local-in"
+        description = "http-internal-in"
     }
     egress {
-        from_port = 8080
-        to_port = 8080
-        protocol = "tcp"
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
         cidr_blocks = [ "${var.bandCloud-network.cidrBlock}" ]
-        description = "http-local-out"
+        description = "http-internal-out"
     }
 }
 
@@ -114,14 +114,14 @@ resource "aws_security_group" "ssh-internal" {
         to_port = 22
         protocol = "tcp"
         cidr_blocks = [ "${var.bandCloud-network.cidrBlock}" ]
-        description = "ssh-local-in"
+        description = "ssh-internal-in"
     }
     egress {
-        from_port = 22
-        to_port = 22
-        protocol = "tcp"
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
         cidr_blocks = [ "${var.bandCloud-network.cidrBlock}" ]
-        description = "ssh-local-out"
+        description = "ssh-internal-out"
     }
 }
 
@@ -136,14 +136,14 @@ resource "aws_security_group" "ping-internal" {
         to_port = -1
         protocol = "icmp"
         cidr_blocks = [ "${var.bandCloud-network.cidrBlock}" ]
-        description = "ping-local-in"
+        description = "ping-internal-in"
     }
     egress {
-        from_port = -1
-        to_port = -1
-        protocol = "icmp"
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
         cidr_blocks = [ "${var.bandCloud-network.cidrBlock}" ]
-        description = "ping-local-out"
+        description = "ping-internal-out"
     }
 }
 */
@@ -157,13 +157,13 @@ resource "aws_security_group" "https-internal" {
         to_port = 443
         protocol = "tcp"
         cidr_blocks = [ "${var.bandCloud-network.cidrBlock}" ]
-        description = "https-local-in"
+        description = "https-internal-in"
     }
     egress {
-        from_port = 443
-        to_port = 443
-        protocol = "tcp"
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
         cidr_blocks = [ "${var.bandCloud-network.cidrBlock}" ]
-        description = "https-local-out"
+        description = "https-internal-out"
     }
 }
