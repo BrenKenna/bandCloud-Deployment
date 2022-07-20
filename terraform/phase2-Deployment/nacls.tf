@@ -289,7 +289,7 @@ resource "aws_network_acl_rule" "outbound_ssh-be-admin" {
     egress = true
     protocol = "tcp"
     rule_action = "allow"
-    cidr_block = "0.0.0.0/0"
+    cidr_block = "${var.bandCloud-network.cidrBlock}"
     from_port = 22
     to_port = 22
     depends_on = [
@@ -324,7 +324,7 @@ resource "aws_network_acl_rule" "outbound_http-be-admin" {
     egress = true
     protocol = "tcp"
     rule_action = "allow"
-    cidr_block = "0.0.0.0/0"
+    cidr_block = "${var.bandCloud-network.cidrBlock}"
     from_port = 8080
     to_port = 8080
     depends_on = [
@@ -361,7 +361,7 @@ resource "aws_network_acl_rule" "outbound_ping-be-admin" {
     egress = true
     protocol = "icmp"
     rule_action = "allow"
-    cidr_block = "0.0.0.0/0"
+    cidr_block = "${var.bandCloud-network.cidrBlock}"
     from_port = -1
     to_port = -1
     icmp_type = -1

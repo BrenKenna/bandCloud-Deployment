@@ -118,7 +118,7 @@ resource "aws_lb_target_group" "be-app-elb-tg" {
     vpc_id = aws_vpc.bandCloud-VPC.id
 
     health_check {
-      path = "/"
+      path = "/projects/listProjects"
       protocol = "HTTP"
       matcher = "200"
       interval = 15
