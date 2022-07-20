@@ -69,11 +69,19 @@ resource "aws_lb_listener_rule" "fe-app-elb-lr" {
 
 
 
-##########################################
+#######################################################################
+#######################################################################
 # 
 # Backend Application ELB
+#
+# -> Canonical name DNS record of resource.bandcloud.com
+#    points to the internal load balancer under the private
+#    bandcloud.com domain
 # 
-##########################################
+# -> The R-53 hosted zone is edited manually => Update associated VPC 
+# 
+########################################################################
+########################################################################
 
 # ELB
 resource "aws_lb" "be-app-elb" {

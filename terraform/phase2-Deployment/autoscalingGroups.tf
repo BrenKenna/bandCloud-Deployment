@@ -31,7 +31,7 @@ resource "aws_autoscaling_attachment" "fe-asg_attachment_elb-1a" {
 resource "aws_autoscaling_group" "asg-fe-1b" {
     name = "fe-asg-1b"
     launch_configuration = aws_launch_configuration.frontend-LC-1b.id
-    vpc_zone_identifier = [ aws_subnet.frontend-SubA.id ]
+    vpc_zone_identifier = [ aws_subnet.frontend-SubB.id ]
     health_check_type = "ELB"
     min_size = 1
     max_size = 2
@@ -85,7 +85,7 @@ resource "aws_autoscaling_attachment" "be-asg_attachment_elb-1a" {
 resource "aws_autoscaling_group" "asg-be-1b" {
     name = "be-asg-1b"
     launch_configuration = aws_launch_configuration.backend-LC-1b.id
-    vpc_zone_identifier = [ aws_subnet.backend-SubA.id ]
+    vpc_zone_identifier = [ aws_subnet.backend-SubB.id ]
     health_check_type = "ELB"
     min_size = 1
     max_size = 2
