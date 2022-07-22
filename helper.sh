@@ -490,7 +490,7 @@ aws s3 cp bandCloud-Angular.tar.gz s3://bandcloud/app/
 
 # Build & push
 cd ~/bandCloud-Angular
-$(aws ecr get-login-password) | docker login --username AWS --password-stdin 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend
+aws ecr get-login-password | docker login --username AWS --password-stdin 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend
 docker build --no-cache -t bandcloud-frontend .
 
 
@@ -505,7 +505,7 @@ docker push 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend:late
 
 # Test run
 docker pull 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend
-docker run -it -p 8080:8080 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend bash launchServer.sh eu-west-1
+docker run -it -p 8080:8080 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend bash launchServer.sh
 
 """
 
