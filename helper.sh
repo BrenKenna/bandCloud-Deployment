@@ -519,3 +519,37 @@ Backend API = http://TEMPLATE_ELB_DNS:8080
 Current directory: /workspace/ionic-file-explorer/file-explorer/dist/file-explorer/
 
 """
+
+
+
+############################################
+############################################
+# 
+# Capture a bunch of curl requests 
+# 
+############################################
+############################################
+
+
+# For packnet sniffing
+for i in $(seq 200)
+    do
+    curl -X GET https://bandcloudapp.com/projects/listProjects 
+    sleep 1s
+done
+
+
+for i in $(seq 200)
+    do
+    curl -X GET http://bandcloudapp.com:8080/projects/listProjects 
+    sleep 1s
+done
+
+
+
+
+```
+
+-H "Content-Type: application/json" -d '{"username": 123456, "password": 100}'
+
+```
