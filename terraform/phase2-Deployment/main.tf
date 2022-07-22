@@ -39,7 +39,7 @@ resource "aws_instance" "frontend-test-1a" {
                 docker pull ${var.app_vars.appRepos.frontend} &>> /workspace/sanity-check.txt
 
                 # Run container
-                docker run -d -p ${var.app_vars.port} ${var.app_vars.appRepos.frontend} bash launchServer.sh ${var.app_vars.region} &>> /workspace/webApplog.txt
+                docker run -d -p ${var.app_vars.port} ${var.app_vars.appRepos.frontend} bash launchServer.sh &>> /workspace/webApplog.txt
                 EOF
 }
 
@@ -73,7 +73,7 @@ resource "aws_instance" "frontend-testing-1b" {
                 docker pull ${var.app_vars.appRepos.frontend} &>> /workspace/sanity-check.txt
 
                 # Run container
-                docker run -d -p ${var.app_vars.port} ${var.app_vars.appRepos.frontend} bash launchServer.sh ${var.app_vars.region} &>> /workspace/webApplog.txt
+                docker run -d -p ${var.app_vars.port} ${var.app_vars.appRepos.frontend} bash launchServer.sh &>> /workspace/webApplog.txt
                 EOF
 }
 

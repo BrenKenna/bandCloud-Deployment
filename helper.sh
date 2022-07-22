@@ -483,18 +483,19 @@ sudo npm install -g @angular/cli
 #
 tar -xf bandCloud-Angular.tar.gz
 rm -f bandCloud-Angular.tar.gz
-tar -czf bandCloud-Angular.tar.gz ionic-file-explorer/
+cd bandCloud-Angular
+tar -czf bandCloud-Angular.tar.gz bandCloud-Frontend/
 aws s3 cp bandCloud-Angular.tar.gz s3://bandcloud/app/
 
 
 # Build & push
 cd ~/bandCloud-Angular
-aws ecr get-login-password | docker login --username AWS --password-stdin 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend
+$(aws ecr get-login-password) | docker login --username AWS --password-stdin 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend
 docker build --no-cache -t bandcloud-frontend .
 
 
 # Sanity check
-docker run -it -p 8080:8080 bandcloud-frontend bash launchServer.sh eu-west-1
+docker run -it -p 8080:8080 bandcloud-frontend bash launchServer.sh
 
 
 # Push if good

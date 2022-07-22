@@ -29,7 +29,7 @@ resource "aws_launch_configuration" "frontend-LC-1a" {
                 docker pull ${var.app_vars.appRepos.frontend} &>> /workspace/sanity-check.txt
 
                 # Run container
-                docker run -d -p ${var.app_vars.port} ${var.app_vars.appRepos.frontend} bash launchServer.sh ${var.app_vars.region} &>> /workspace/webApplog.txt
+                docker run -d -p ${var.app_vars.port} ${var.app_vars.appRepos.frontend} bash launchServer.sh &>> /workspace/webApplog.txt
                 EOF
 }
 
@@ -64,7 +64,7 @@ resource "aws_launch_configuration" "frontend-LC-1b" {
                 docker pull ${var.app_vars.appRepos.frontend} &>> /workspace/sanity-check.txt
 
                 # Run container
-                docker run -d -p ${var.app_vars.port} ${var.app_vars.appRepos.frontend} bash launchServer.sh ${var.app_vars.region} &>> /workspace/webApplog.txt
+                docker run -d -p ${var.app_vars.port} ${var.app_vars.appRepos.frontend} bash launchServer.sh &>> /workspace/webApplog.txt
                 EOF
 }
 
