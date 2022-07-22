@@ -553,3 +553,40 @@ done
 -H "Content-Type: application/json" -d '{"username": 123456, "password": 100}'
 
 ```
+
+#
+# Managed by AWS: ELB VPCs are the same
+#  vpc-0798978e98a4ae9c9, 
+aws ec2 describe-network-interfaces \
+    --region eu-west-1 \
+    --filters Name=description,Values="ELB app/fe-app-elb/188f1d0bfb81f46d"
+
+
+aws ec2 describe-network-interfaces \
+    --region eu-west-1 \
+    --filters Name=description,Values="ELB app/be-app-elb/4a8cfa5008c26864"
+
+
+aws ec2 describe-network-interfaces \
+    --region eu-west-1 \
+    --filters Name=description,Values="Interface for NAT Gateway nat-0cb01b1343f10bc65"
+
+aws ec2 describe-network-interfaces \
+    --region eu-west-1 \
+    --filters Name=attachment.instance-owner-id,Values="amazon-aws" Name=vpc-id,Values="vpc-0798978e98a4ae9c9"
+
+
+aws ec2 describe-network-interfaces \
+    --region eu-west-1 \
+    --filters Name=attachment.instance-owner-id,Values="amazon-elb" Name=vpc-id,Values="vpc-0798978e98a4ae9c9"
+
+
+# Provisioned
+aws ec2 describe-network-interfaces \
+    --region eu-west-1 \
+    --filters Name=description,Values=""
+
+aws ec2 describe-network-interfaces \
+    --region eu-west-1 \
+    --filters Name=attachment.instance-owner-id,Values="017511708259"
+
