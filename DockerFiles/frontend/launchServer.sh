@@ -10,5 +10,5 @@
 
 
 # Run server
-cd bandCloud-Frontend
+cd file-explorer
 node dist-server.js
