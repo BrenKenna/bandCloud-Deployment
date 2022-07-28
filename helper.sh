@@ -481,11 +481,15 @@ sudo npm install -g @angular/cli
 #   => Want docker container to all files from projects root folder
 #   => Work space dir is this folder
 #
+# tar -czf bandCloud-Angular.tar.gz ../bandCloud-Frontend/
+# scp -i bandCloud-Angular.tar.gz ec2-user@:~/
+mkdir bandCloud-Angular && mv bandCloud-Angular.tar.gz ~/bandCloud-Angular/
+cd bandCloud-Angular
 tar -xf bandCloud-Angular.tar.gz
 rm -f bandCloud-Angular.tar.gz
-cd bandCloud-Angular
 tar -czf bandCloud-Angular.tar.gz bandCloud-Frontend/
 aws s3 cp bandCloud-Angular.tar.gz s3://bandcloud/app/
+rm -f bandCloud-Angular.tar.gz
 
 
 # Build & push

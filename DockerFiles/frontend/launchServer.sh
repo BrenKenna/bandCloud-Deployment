@@ -1,14 +1,16 @@
 #!/bin/bash
-
 ######################################################################
 ######################################################################
 #
-# Script to update html pages for ELB DNS and run server
+# Script to run webserver
+# 
+# Ideally would things like managing logging etc
+# 
 #
 ######################################################################
 ######################################################################
 
 
 # Run server
-cd file-explorer
+cd bandCloud-frontend
 node dist-server.js
