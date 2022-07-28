@@ -72,10 +72,12 @@ ssh -i bandCloud.pem ec2-user@ec2-54-155-250-180.eu-west-1.compute.amazonaws.com
 sudo yum update -y
 
 
-# UFW-Messes with Security Group
+# UFW-Messes with Security Group because it OS level firewall
+#  and below are incomplete
 '''
     sudo amazon-linux-extras install epel # yum install -y epel-release
-    sudo yum install -y ufw # Allow traffic through port 8080: stop application running as root
+    sudo yum install -y ufw
+    # Allow traffic through port 8080: stop application running as root
     sudo ufw enable -y
     sudo ufw allow 8080/tcp
 '''
@@ -162,32 +164,6 @@ node app/index.js
 aws s3 presign s3://bandcloud/test/test.txt --expires-in 120
 
 
-
-##############################
-##############################
-#
-# cURL Req
-# 
-##############################
-##############################
-
-# For packnet sniffing
-for i in $(seq 100); do curl -k -X POST http://localhost:8080/login -H "Content-Type: application/json" -d '{"username": 123456, "password": 100}'; sleep 1s; done
-
-
-
-# Check response from posting a login
-curl -k -X POST https://localhost:8080/login -H "Content-Type: application/json" -d '{"username": 123456, "password": 100}'
-
-"""
-Postman recieves response but a
-
-"""
-
-# Post to web app
-curl -k -X POST http://3.249.240.203:8080/reg -H "Content-Type: application/json" -d '{"username": "tom", "password": apples, "email": "hello@yolo.com"}'
-
-
 ###################################
 # 
 # Terraform
@@ -201,11 +177,9 @@ sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinu
 sudo yum -y install terraform
 
 
-export AWS_ACCESS_KEY=$(grep "id" ~/.aws/credentials | cut -d \= -f 2 | sed 's/ \+//g')
-export AWS_SECRET_ACCESS_KEY=$(grep "secret" ~/.aws/credentials | cut -d \= -f 2 | sed 's/ \+//g')
-
-
 # Initalize and inspect
+# export AWS_ACCESS_KEY=$(grep "id" cred | cut -d \= -f 2 | sed 's/ \+//g')
+# export AWS_SECRET_ACCESS_KEY=$(grep "secret" creds | cut -d \= -f 2 | sed 's/ \+//g')
 terraform init
 terraform plan # Output here quite useful to check TF related vars etc
 
@@ -507,23 +481,9 @@ docker tag bandcloud-frontend 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandc
 docker push 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend:latest
 
 
-# Test run
+# Sanity check: Pull image and run
 docker pull 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend
 docker run -it -p 8080:8080 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend bash launchServer.sh
-
-"""
-
-- Definately works fine, reckon it is just a timing issue for 502-Bad Gatewat. Frontend container is big etc
-
-An error occurred (LoadBalancerNotFound) when calling the DescribeLoadBalancers operation: Load balancers '[be-app-elb]' not found
-
-Error, unable to find BE-DNS running as is for debugging
-BandCloud listening on port = 8080, address = 0.0.0.0
-Backend API = http://TEMPLATE_ELB_DNS:8080
-Current directory: /workspace/ionic-file-explorer/file-explorer/dist/file-explorer/
-
-"""
-
 
 
 ############################################
