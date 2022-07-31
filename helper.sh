@@ -386,7 +386,7 @@ docker push 017511708259.dkr.ecr.eu-west-1.amazonaws.com/spring-backend:lastest
 
 
 # Sanity check
-docker run -it -p 8080:8080 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-backend
+docker run -it -p 8080:8080 017511708259.dkr.ecr.eu-west-1.amazonaws.com/spring-backend
 
 
 
@@ -456,25 +456,37 @@ sudo npm install -g @angular/cli
 #   => Work space dir is this folder
 #
 # tar -czf bandCloud-Angular.tar.gz ../bandCloud-Frontend/
-# scp -i bandCloud-Angular.tar.gz ec2-user@:~/
-mkdir bandCloud-Angular && mv bandCloud-Angular.tar.gz ~/bandCloud-Angular/
+# scp -pi ___ bandCloud-Angular.tar.gz ec2-user@____:~/
+# ssh -i ___ ec2-user@___
+
+# Unpack so that files can be edited if needs be
+mkdir -p bandCloud-Angular && mv bandCloud-Angular.tar.gz ~/bandCloud-Angular/
 cd bandCloud-Angular
 tar -xf bandCloud-Angular.tar.gz
 rm -f bandCloud-Angular.tar.gz
+
+
 tar -czf bandCloud-Angular.tar.gz bandCloud-Frontend/
 aws s3 cp bandCloud-Angular.tar.gz s3://bandcloud/app/
 rm -f bandCloud-Angular.tar.gz
 
 
-# Build & push
+# Build repo: ~500MB + 380MB (Yum etc) + ~200MB + 100MB (App), Sun Jul 31 13:18:21 UTC 2022 -> Sun Jul 31 13:22:13 UTC 2022
 cd ~/bandCloud-Angular
 aws ecr get-login-password | docker login --username AWS --password-stdin 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend
-docker build --no-cache -t bandcloud-frontend .
+date; docker build --no-cache -t bandcloud-frontend . ; date
 
 
 # Sanity check
 docker run -it -p 8080:8080 bandcloud-frontend bash launchServer.sh
 
+
+"""
+Threw error
+
+Error: Cannot find module 'cookie-parser'
+
+"""
 
 # Push if good
 docker tag bandcloud-frontend 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend:latest
