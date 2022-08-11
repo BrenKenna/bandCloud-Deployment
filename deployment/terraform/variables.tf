@@ -22,15 +22,15 @@ variable "bandCloud-network" {
     default = {
       az1_subnets = {
           "availZone": "eu-west-1a",
-          "frontend": "10.2.1.0/24",
-          "backend": "10.2.2.0/24"
+          "frontend": "192.168.1.0/24",
+          "backend": "192.168.2.0/24"
       }
       az2_subnets = {
           "availZone": "eu-west-1b",
-          "frontend": "10.2.3.0/24",
-          "backend": "10.2.4.0/24"
+          "frontend": "192.168.3.0/24",
+          "backend": "192.168.4.0/24"
       }
-      cidrBlock = "10.2.0.0/16"
+      cidrBlock = "192.168.0.0/16"
       region = "eu-west-1"
       vpcName = "bandCloud-VPC"
     }

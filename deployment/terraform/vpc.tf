@@ -74,7 +74,7 @@ resource "aws_subnet" "backend-SubB" {
     availability_zone = var.bandCloud-network.az2_subnets.availZone
     map_public_ip_on_launch = true
     tags = {
-        Name = "backend-SubBs"
+        Name = "backend-SubB"
     }
     depends_on = [ aws_vpc.bandCloud-VPC ]
 }

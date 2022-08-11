@@ -374,9 +374,10 @@ unzip app.zip
 mv build ~/spring-backend
 
 # Archive to S3
-tar -czf ~/REST_API.tar.gz build/
-aws s3 cp ~/REST_API.tar.gz s3://bandcloud/app/
+tar -czf ~/Spring-REST-API.tar.gz build/
+aws s3 cp ~/Spring-REST-API.tar.gz s3://bandcloud/app/
 
+rm -f ~/Spring-REST-API.tar.gz
 
 # Install & login
 rm -f ~/.docker/config.json
@@ -389,15 +390,23 @@ sudo usermod -a -G docker ec2-user
 docker container prune -f && docker image prune -f
 
 
-# Build & push
+# Build
 aws ecr get-login-password | docker login --username AWS --password-stdin 017511708259.dkr.ecr.eu-west-1.amazonaws.com/spring-backend:latest
 docker build --no-cache -t spring-backend .
+
+
+# Sanity check
+docker run -it -p 8080:8080 spring-backend
+
+
+# Tag & push
 docker tag spring-backend:latest 017511708259.dkr.ecr.eu-west-1.amazonaws.com/spring-backend:latest
-docker push 017511708259.dkr.ecr.eu-west-1.amazonaws.com/spring-backend:lastest
+docker push 017511708259.dkr.ecr.eu-west-1.amazonaws.com/spring-backend
 
 
 # Sanity check
 docker run -it -p 8080:8080 017511708259.dkr.ecr.eu-west-1.amazonaws.com/spring-backend
+
 
 
 
