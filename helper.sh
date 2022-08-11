@@ -351,11 +351,22 @@ curl -k -X GET http://34.247.12.14:8080/ec2
 '
 
 
-################################
+#######################################
 #
-# Package into container
+# Build & Package into container
 #
-################################
+#######################################
+
+
+# Build jar with dependencies
+cd < Wherever the projects root folder is >
+gradle build
+
+
+# Test before packaging
+cd build/libs
+java -jar service_testing-0.0.1.jar
+
 
 # Setup folder
 mkdir ~/spring-backend
