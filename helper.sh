@@ -486,6 +486,8 @@ tar -xf bandCloud-Angular.tar.gz
 rm -f bandCloud-Angular.tar.gz
 
 
+
+# Post any updates 
 tar -czf bandCloud-Angular.tar.gz bandCloud-Frontend/
 aws s3 cp bandCloud-Angular.tar.gz s3://bandcloud/app/
 rm -f bandCloud-Angular.tar.gz
@@ -517,6 +519,60 @@ docker push 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend:late
 docker pull 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend
 docker run -it -p 8080:8080 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend bash launchServer.sh
 
+
+######################
+#
+#
+#
+######################
+
+
+# List active processes
+docker ps
+docker kill b722b62d0faf
+
+# Remove previous image
+docker images
+docker rmi -f 9ed564f511a2
+
+# Login, pull
+aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend
+docker pull 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend
+
+
+# Run
+docker run -it -p 8080:8080 017511708259.dkr.ecr.eu-west-1.amazonaws.com/bandcloud-frontend
+
+
+# Launch server
+bash launchServer.sh
+
+
+############################################
+############################################
+# 
+# Edit Angular Build 
+# 
+############################################
+############################################
+
+# Run container
+docker run -it -p 8080:8080 bandcloud-frontend bash 
+
+
+# Find file containing service paths
+cd /workspace/bandCloud-Frontend/bandCloud-frontend/dist/bandCloud-frontend
+grep -il "_rootPath" *js
+
+
+# Edit server 
+MY_IP=3.254.32.45
+sed "s/bandcloudapp.com/${MY_IP}/g" common.5ea0070e2d657a95.js > tmp
+mv tmp common.5ea0070e2d657a95.js
+
+# Serve updated app
+cd /workspace/bandCloud-Frontend/bandCloud-frontend/
+node dist-server.js
 
 ############################################
 ############################################

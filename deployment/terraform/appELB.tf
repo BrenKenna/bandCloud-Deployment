@@ -6,6 +6,7 @@
 # Consider adding the HTTPS listener for frontend elb target group
 #  https://aws.amazon.com/premiumsupport/knowledge-center/associate-acm-certificate-alb-nlb/
 # 
+#   => Would mean publishing the ARN of SSL/TLS cert managed by AWS => Nope
 # 
 ####################################################################################
 ####################################################################################
